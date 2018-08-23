@@ -79,16 +79,17 @@
 
 
 
-<meta name="description" content="Java">
-<meta property="og:type" content="website">
+<meta name="description" content="守护线程守护线程线程分类Java的线程分为两种：User Thread（用户线程）、DaemonThread（守护线程）。 定义守护线程：守护线程--也称“服务线程”，在没有用户线程可服务时会自动离开。 优先级守护线程的优先级比较低，用于为系统中的其他对象和线程提供服务。 设置通过设置`setDaemon(true)`来设置线程为“守护线程”；将一个用户线程设置为守护线程的方式是在线程创建对象之">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Wayne">
-<meta property="og:url" content="http://cxzd.space/index.html">
+<meta property="og:url" content="http://cxzd.space/2018/08/23/守护线程/index.html">
 <meta property="og:site_name" content="Wayne">
-<meta property="og:description" content="Java">
+<meta property="og:description" content="守护线程守护线程线程分类Java的线程分为两种：User Thread（用户线程）、DaemonThread（守护线程）。 定义守护线程：守护线程--也称“服务线程”，在没有用户线程可服务时会自动离开。 优先级守护线程的优先级比较低，用于为系统中的其他对象和线程提供服务。 设置通过设置`setDaemon(true)`来设置线程为“守护线程”；将一个用户线程设置为守护线程的方式是在线程创建对象之">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-08-23T15:33:30.563Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Wayne">
-<meta name="twitter:description" content="Java">
+<meta name="twitter:description" content="守护线程守护线程线程分类Java的线程分为两种：User Thread（用户线程）、DaemonThread（守护线程）。 定义守护线程：守护线程--也称“服务线程”，在没有用户线程可服务时会自动离开。 优先级守护线程的优先级比较低，用于为系统中的其他对象和线程提供服务。 设置通过设置`setDaemon(true)`来设置线程为“守护线程”；将一个用户线程设置为守护线程的方式是在线程创建对象之">
 
 
 
@@ -118,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://cxzd.space/"/>
+  <link rel="canonical" href="http://cxzd.space/2018/08/23/守护线程/"/>
 
 
 
 
 
-  <title>Wayne</title>
+  <title> | Wayne</title>
   
 
 
@@ -143,8 +144,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -237,9 +237,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -269,9 +269,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/23/守护线程/" itemprop="url">未命名</a></h1>
+          <h1 class="post-title" itemprop="name headline"></h1>
         
 
         <div class="post-meta">
@@ -321,9 +319,7 @@
       
 
       
-        
-          
-            <hr>
+        <hr>
 <h2 id="守护线程"><a href="#守护线程" class="headerlink" title="守护线程"></a>守护线程</h2><h1 id="守护线程-1"><a href="#守护线程-1" class="headerlink" title="守护线程"></a>守护线程</h1><h2 id="线程分类"><a href="#线程分类" class="headerlink" title="线程分类"></a>线程分类</h2><pre><code>Java的线程分为两种：User Thread（用户线程）、DaemonThread（守护线程）。
 </code></pre><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><pre><code>守护线程：守护线程--也称“服务线程”，在没有用户线程可服务时会自动离开。
 </code></pre><h2 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h2><pre><code>守护线程的优先级比较低，用于为系统中的其他对象和线程提供服务。
@@ -353,8 +349,6 @@
 </code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">I&apos;m main thread...  </span><br><span class="line">I&apos;m child thread..  </span><br><span class="line">I&apos;m child thread..  </span><br><span class="line">I&apos;m child thread..  </span><br><span class="line">I&apos;m child thread..  </span><br><span class="line">I&apos;m child thread..  </span><br><span class="line">I&apos;m child thread..  </span><br><span class="line">I&apos;m child thread..  </span><br><span class="line">I&apos;m child thread..  </span><br><span class="line">I&apos;m child thread..（无限输出）</span><br></pre></td></tr></table></figure>
 <p>上面代码证实了线程池会将守护线程转变为用户线程。</p>
 
-          
-        
       
     </div>
     
@@ -371,250 +365,28 @@
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://cxzd.space/2018/08/23/Typora使用说明/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Wayne Cui">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Wayne">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/23/Typora使用说明/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-23T23:16:13+08:00">
-                2018-08-23
-              </time>
+              <a href="/2018/08/23/Typora使用说明/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <hr>
-<h2 id="Typora-使用说明"><a href="#Typora-使用说明" class="headerlink" title="Typora 使用说明"></a>Typora 使用说明</h2><h1 id="Typora使用说明"><a href="#Typora使用说明" class="headerlink" title="Typora使用说明"></a>Typora使用说明</h1><h2 id="区域元素"><a href="#区域元素" class="headerlink" title="区域元素"></a>区域元素</h2><h3 id="YAML-FONT-Matters"><a href="#YAML-FONT-Matters" class="headerlink" title="YAML FONT Matters"></a>YAML FONT Matters</h3><hr>
-<p>在文章最上方输入—，按换行键（Shift + Enter），输入内容即可 </p>
-<h3 id="菜单"><a href="#菜单" class="headerlink" title="菜单"></a>菜单</h3><p>在需要插入目录的地方写上<a href="大写小写都可以">TOC</a>，回车，然后整篇文章的目录就自动形成了，比如最开始的那个目录就是通过这种方法生成的。</p>
-<h3 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h3><p>开头#的个数表示，标题有6个级别，#表示开始，换行建结束。注意：#号后面要有一个空格</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 一级标题</span><br><span class="line">## 二级标题</span><br><span class="line">###### 六级标题</span><br></pre></td></tr></table></figure>
-<h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><blockquote>
-<p>已&gt;开头，空格+文字</p>
-</blockquote>
-<h3 id="序列"><a href="#序列" class="headerlink" title="序列"></a>序列</h3><p>开头*/+/-，空格+文字，可以创建无序序列，换行键换行，Del+shift+tab跳出</p>
-<p>开头1.，空格+文字，可以创建有序序列，换行键换行并排序+1，Del+shift+tab跳出</p>
-<ul>
-<li>*无序序列1</li>
-</ul>
-<ul>
-<li>+无序序列2</li>
-</ul>
-<ul>
-<li>-无序序列3</li>
-</ul>
-<ol>
-<li>有序序列1</li>
-<li>有序序列2</li>
-<li>有序序列3</li>
-</ol>
-<h3 id="可选序列"><a href="#可选序列" class="headerlink" title="可选序列"></a>可选序列</h3><p>开头序列 + 空格 + [  ] + 空格  + 文字 ,换行键换行，Del+shift+tab跳出</p>
-<ul>
-<li style="list-style: none"><input type="checkbox" checked> a</li>
-</ul>
-<ul>
-<li style="list-style: none"><input type="checkbox" checked> b</li>
-</ul>
-<h3 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h3><p>开头<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">如果想让显示行数，需要开启，在File–&gt;preference–&gt;Code Fences。Typora支持大部分的编程语言，且支持高亮显示。开始编写之前需要现在右下角选择语言。</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">​```java</span><br><span class="line">​</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">```python</span><br><span class="line">print (&quot;Hello World!&quot;)</span><br></pre></td></tr></table></figure>
-<h3 id="数学块"><a href="#数学块" class="headerlink" title="数学块"></a>数学块</h3><p>使用MtathJax建立数学公式</p>
-<p>开头$$+换行键，产生输入区域，输入Tex/LaTex格式的数学公式<br>$$<br>\mathbf{v}_1\times\mathbf{v}_2 = \begin{vmatrix}<br>\mathbf{i} &amp; \mathbf{j} &amp; \mathbf{k} \<br>\frac{\partial X}{\partial u} &amp; \frac{\partial Y}{\partial u} &amp; 0 \<br>\frac{\partial X}{\partial v} &amp; \frac{\partial Y}{\partial v} &amp; 0 \<br>\end{vmatrix}<br>$$</p>
-<hr>
-<h3 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h3><p>开头|+列名+|+列名+|+换行键，创建一个2*2表格</p>
-<p>将鼠标放置其上，弹出编辑尺寸，个数，文字等</p>
-<p>或者直接Ctrl + T</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">列1</th>
-<th style="text-align:center">列2</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center"></td>
-</tr>
-</tbody>
-</table>
-<h3 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h3><p>在需要添加脚注的文字后面+[+^+序列+]，注释的产生可以鼠标放置其上单击自动产生，添加信息</p>
-<p>或人工添加+[+^+空格+序列+空格]+:</p>
-<p>这是一个注释<a href="这是一个注释。">^ 1 </a>。</p>
-<h3 id="分割线"><a href="#分割线" class="headerlink" title="分割线"></a>分割线</h3><p>输入***/—，换行键换行生成水平分割线</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">***</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="特征元素"><a href="#特征元素" class="headerlink" title="特征元素"></a>特征元素</h2><h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><p>使用尖括号包裹的url将产生一个连接，例如：<code>&lt;www.baidu.com&gt;</code>将产生连接:<a href="http://www.baidu.com/" target="_blank" rel="noopener">www.baidu.com</a>.</p>
-<p>如果是标准的url，则会自动产生连接，例如:<a href="http://www.google.com/" target="_blank" rel="noopener">www.google.com</a></p>
-<h3 id="超链接"><a href="#超链接" class="headerlink" title="超链接"></a>超链接</h3><p>使用[]括住要超链接的内容，进阶这()括住超链接源+名字,超链接源后面+超链接命名.</p>
-<p>可以使用快捷键 Ctrl+K 创建链接。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">这是一个[百度](www.baidu.com &quot;baidu&quot;)的超链接</span><br></pre></td></tr></table></figure>
-<p>这是一个<a href="www.baidu.com" title="baidu">百度</a>的超链接</p>
-<h3 id="内链接"><a href="#内链接" class="headerlink" title="内链接"></a>内链接</h3><p>Typora可以直接使用header来跳转，方法是使用一个引用自<code>header</code>的<code>href</code><br>如果要查看<a href="#区域元素">区域元素<a>请点击 (待确认)</a></a></p>
-<h3 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h3><ol>
-<li>手动添加： 类似链接，前面需加！</li>
-<li>用鼠标拖拽图片进入，然后鼠标放置其上修改</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![test1]（/path/test/test.jpg）</span><br></pre></td></tr></table></figure>
-<p><img src="C:\Users\Public\Pictures\Sample Pictures\Hydrangeas.jpg" alt="test"></p>
-<hr>
-<h3 id="斜体"><a href="#斜体" class="headerlink" title="斜体"></a>斜体</h3><p>以<em> </em>或_ _ 括住</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">我是*斜体*.</span><br><span class="line">我也是_斜体_.</span><br></pre></td></tr></table></figure>
-<p>我是<em>斜体</em>。</p>
-<p>我也是_斜体_。</p>
-<h3 id="加粗"><a href="#加粗" class="headerlink" title="加粗"></a>加粗</h3><p>以<strong> </strong> 或<strong> </strong>括住</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">我被**加粗**了。</span><br><span class="line">我被__加粗__了。</span><br></pre></td></tr></table></figure>
-<p>我被<strong>加粗</strong>了。<br>我被<strong>加粗</strong>了。</p>
-<h3 id="删除线"><a href="#删除线" class="headerlink" title="删除线"></a>删除线</h3><p>以~~ ~~括住</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">我被~~删除~~了。</span><br></pre></td></tr></table></figure>
-<p>我被<del>删除</del>了。</p>
-<h3 id="下划线"><a href="#下划线" class="headerlink" title="下划线"></a>下划线</h3><p>使用HTML标签<u>Underline</u></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;u&gt;Underline&lt;/u&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="段落中代码"><a href="#段落中代码" class="headerlink" title="段落中代码"></a>段落中代码</h3><p>用两个`在正常段落中标示代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Use the `print()` function</span><br></pre></td></tr></table></figure>
-<p>Use the <code>print()</code> function</p>
-<h3 id="下标"><a href="#下标" class="headerlink" title="下标"></a>下标</h3><p>网上教程说用一对波浪线既可以表示，但是我没有试出来。后来又仔细的看了一下，可以了，需要右键insert打开Math Block，效果不是太好，比如水分子的表达式：<br>$$<br>H~2~O<br>$$</p>
-<h3 id="上标"><a href="#上标" class="headerlink" title="上标"></a>上标</h3><p>需 <code>Preference</code> Panel -&gt; <code>Markdown</code> Tab启动，</p>
-<p>使用^在上标前面</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">X^2</span><br></pre></td></tr></table></figure>
-<p>$$<br>X^2<br>$$</p>
-<h3 id="高亮"><a href="#高亮" class="headerlink" title="高亮"></a>高亮</h3><p>需 <code>Preference</code> Panel -&gt; <code>Markdown</code> Tab启动，</p>
-<p>使用双==括住内容</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">==highlight==</span><br></pre></td></tr></table></figure>
-<p>==highlight==</p>
-<hr>
-<h2 id="快捷键"><a href="#快捷键" class="headerlink" title="快捷键"></a>快捷键</h2><ul>
-<li>无序列表：输入-之后输入空格</li>
-<li>有序列表：输入数字+“.”之后输入空格</li>
-<li>标题：ctrl+数字</li>
-<li>表格：ctrl+t</li>
-<li>生成目录：[TOC]按回车</li>
-<li>选中一整行：ctrl+l</li>
-<li>选中单词：ctrl+d</li>
-<li>选中相同格式的文字：ctrl+e</li>
-<li>跳转到文章开头：ctrl+home</li>
-<li>跳转到文章结尾：ctrl+end</li>
-<li>搜索：ctrl+f</li>
-<li>替换：ctrl+h</li>
-<li>引用：输入&gt;之后输入空格</li>
-<li>加粗：<strong>ctrl+b</strong></li>
-<li>倾斜：<em>ctrl+i</em></li>
-<li>下划线：<u>ctrl+u</u></li>
-<li>删除线：<del>alt+shift+5</del></li>
-<li>插入图片：直接拖动到指定位置即可或者ctrl+shift+i</li>
-<li>插入链接：ctrl+k</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -624,138 +396,11 @@
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://cxzd.space/2018/07/21/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Wayne Cui">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Wayne">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/21/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-21T17:25:42+08:00">
-                2018-07-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
-        
+    <div class="post-spread">
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
 
 
           </div>
@@ -763,6 +408,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -783,8 +432,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -826,6 +484,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#守护线程"><span class="nav-number">1.</span> <span class="nav-text">守护线程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#守护线程-1"><span class="nav-number"></span> <span class="nav-text">守护线程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#线程分类"><span class="nav-number">1.</span> <span class="nav-text">线程分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义"><span class="nav-number">2.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优先级"><span class="nav-number">3.</span> <span class="nav-text">优先级</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置"><span class="nav-number">4.</span> <span class="nav-text">设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生命周期"><span class="nav-number">5.</span> <span class="nav-text">生命周期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#守护线程的注意点"><span class="nav-number">6.</span> <span class="nav-text">守护线程的注意点</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -966,6 +640,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
