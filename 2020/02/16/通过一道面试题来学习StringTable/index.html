@@ -87,13 +87,13 @@
 <meta property="og:site_name" content="Wayne">
 <meta property="og:description" content="通过一道面试题来学习StringTable先看下下面这道面试题 12345678910111213141516171819String s1 = &quot;a&quot;;    String s2 = &quot;b&quot;;    String s3 = &quot;a&quot; + &quot;b&quot;;    String s4 = s1 + s2;    String s5 = &quot;ab&quot;;    String s6 = s4.intern();">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://cxzd.space/2020/02/16/通过一道面试题来学习StringTable/D:/blog/xsyfl.github.io/source/_posts/image/debug-memory-01.png">
-<meta property="og:image" content="http://cxzd.space/2020/02/16/通过一道面试题来学习StringTable/D:/blog/xsyfl.github.io/source/_posts/image/debug-memory-02.png">
-<meta property="og:updated_time" content="2020-02-16T13:39:00.133Z">
+<meta property="og:image" content="http://cxzd.space/2020/02/16/通过一道面试题来学习StringTable/D:/blog/xsyfl.github.io/source/_posts/通过一道面试题来学习StringTable/debug-memory-01.png">
+<meta property="og:image" content="http://cxzd.space/2020/02/16/通过一道面试题来学习StringTable/D:/blog/xsyfl.github.io/source/_posts/通过一道面试题来学习StringTable/debug-memory-02.png">
+<meta property="og:updated_time" content="2020-02-16T13:42:05.948Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="通过一道面试题来学习StringTable">
 <meta name="twitter:description" content="通过一道面试题来学习StringTable先看下下面这道面试题 12345678910111213141516171819String s1 = &quot;a&quot;;    String s2 = &quot;b&quot;;    String s3 = &quot;a&quot; + &quot;b&quot;;    String s4 = s1 + s2;    String s5 = &quot;ab&quot;;    String s6 = s4.intern();">
-<meta name="twitter:image" content="http://cxzd.space/2020/02/16/通过一道面试题来学习StringTable/D:/blog/xsyfl.github.io/source/_posts/image/debug-memory-01.png">
+<meta name="twitter:image" content="http://cxzd.space/2020/02/16/通过一道面试题来学习StringTable/D:/blog/xsyfl.github.io/source/_posts/通过一道面试题来学习StringTable/debug-memory-01.png">
 
 
 
@@ -414,9 +414,9 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public class Demo03 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        System.out.println(&quot;1&quot;);</span><br><span class="line">        System.out.println(&quot;2&quot;);</span><br><span class="line">        System.out.println(&quot;3&quot;);</span><br><span class="line">        System.out.println(&quot;4&quot;);</span><br><span class="line">        System.out.println(&quot;5&quot;);</span><br><span class="line">        System.out.println(&quot;6&quot;);</span><br><span class="line">        System.out.println(&quot;7&quot;);</span><br><span class="line">        System.out.println(&quot;8&quot;);</span><br><span class="line">        System.out.println(&quot;9&quot;);</span><br><span class="line">        System.out.println(&quot;1&quot;);</span><br><span class="line">        System.out.println(&quot;2&quot;);</span><br><span class="line">        System.out.println(&quot;3&quot;);</span><br><span class="line">        System.out.println(&quot;4&quot;);</span><br><span class="line">        System.out.println(&quot;5&quot;);</span><br><span class="line">        System.out.println(&quot;6&quot;);</span><br><span class="line">        System.out.println(&quot;7&quot;);</span><br><span class="line">        System.out.println(&quot;8&quot;);</span><br><span class="line">        System.out.println(&quot;9&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>然后分别在两个 <strong>System.out.println(“1”);</strong>  处打断点.</p>
 <p>然后通过IDea中的Debug   memory工具来查看对象个数.</p>
-<p><img src="/2020/02/16/通过一道面试题来学习StringTable/D:/blog\xsyfl.github.io\source\_posts\image\debug-memory-01.png" alt="debug-memory-01"></p>
+<p><img src="/2020/02/16/通过一道面试题来学习StringTable/D:/blog\xsyfl.github.io\source\_posts\通过一道面试题来学习StringTable\debug-memory-01.png" alt="debug-memory-01"></p>
 <p>点击load classes 查看运行到当前代码处,每个对象的实例个数.</p>
-<p><img src="/2020/02/16/通过一道面试题来学习StringTable/D:/blog\xsyfl.github.io\source\_posts\image\debug-memory-02.png" alt="debug-memory-02"></p>
+<p><img src="/2020/02/16/通过一道面试题来学习StringTable/D:/blog\xsyfl.github.io\source\_posts\通过一道面试题来学习StringTable\debug-memory-02.png" alt="debug-memory-02"></p>
 <p>其中 String对象为2252.</p>
 <p>然后我们单步执行一下,2254(在System.out.print创建类名字符串),再执行一下,变成了2255.</p>
 <p>走到下一个断点处,String对象变为2262个,继续往下走,字符串个数不变.</p>
