@@ -252,6 +252,340 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://cxzd.space/2020/02/23/从面试题i++和++i来看java字节码/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wayne Cui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wayne">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/23/从面试题i++和++i来看java字节码/" itemprop="url">从面试题i++和++i来看java字节码</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-23T17:20:00+08:00">
+                2020-02-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,239
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  10
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="从面试题i-和-i来看java字节码"><a href="#从面试题i-和-i来看java字节码" class="headerlink" title="从面试题i++和++i来看java字节码"></a>从面试题i++和++i来看java字节码</h1><p>我们先来看一道经典面试题</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo05</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">        <span class="keyword">int</span> b = a++ + ++a + a--;</span><br><span class="line">        System.out.println(a);</span><br><span class="line">        System.out.println(b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用<figure class="highlight plain"><figcaption><span>-v Demo05.class```进行反编译. -v表示输出类文件的详细信息</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<p>Classfile /E:/workplace/abc/jvmStudy/out/production/jvmStudy/demo1/Demo05.class<br>  Last modified 2020-2-23; size 567 bytes<br>  MD5 checksum e378885aa1eef9f5fd48fda536b4467b<br>  Compiled from “Demo05.java”<br>public class demo1.Demo05<br>  minor version: 0<br>  major version: 52<br>  flags: ACC_PUBLIC, ACC_SUPER<br>Constant pool:</p>
+<p>   #1 = Methodref          #5.#22         // java/lang/Object.”<init>“:()V</init></p>
+<p>   #2 = Fieldref           #23.#24        // java/lang/System.out:Ljava/io/PrintStream;</p>
+<p>   #3 = Methodref          #25.#26        // java/io/PrintStream.println:(I)V</p>
+<p>   #4 = Class              #27            // demo1/Demo05</p>
+<p>   #5 = Class              #28            // java/lang/Object</p>
+<p>   #6 = Utf8               <init></init></p>
+<p>   #7 = Utf8               ()V</p>
+<p>   #8 = Utf8               Code</p>
+<p>   #9 = Utf8               LineNumberTable</p>
+<p>  #10 = Utf8               LocalVariableTable</p>
+<p>  #11 = Utf8               this</p>
+<p>  #12 = Utf8               Ldemo1/Demo05;</p>
+<p>  #13 = Utf8               main</p>
+<p>  #14 = Utf8               ([Ljava/lang/String;)V</p>
+<p>  #15 = Utf8               args</p>
+<p>  #16 = Utf8               [Ljava/lang/String;</p>
+<p>  #17 = Utf8               a</p>
+<p>  #18 = Utf8               I</p>
+<p>  #19 = Utf8               b</p>
+<p>  #20 = Utf8               SourceFile</p>
+<p>  #21 = Utf8               Demo05.java</p>
+<p>  #22 = NameAndType        #6:#7          // “<init>“:()V</init></p>
+<p>  #23 = Class              #29            // java/lang/System</p>
+<p>  #24 = NameAndType        #30:#31        // out:Ljava/io/PrintStream;</p>
+<p>  #25 = Class              #32            // java/io/PrintStream</p>
+<p>  #26 = NameAndType        #33:#34        // println:(I)V</p>
+<p>  #27 = Utf8               demo1/Demo05</p>
+<p>  #28 = Utf8               java/lang/Object</p>
+<p>  #29 = Utf8               java/lang/System</p>
+<p>  #30 = Utf8               out</p>
+<p>  #31 = Utf8               Ljava/io/PrintStream;</p>
+<p>  #32 = Utf8               java/io/PrintStream</p>
+<p>  #33 = Utf8               println</p>
+<p>  #34 = Utf8               (I)V<br>{<br>  public demo1.Demo05();<br>    descriptor: ()V<br>    flags: ACC_PUBLIC<br>    Code:<br>      stack=1, locals=1, args_size=1<br>         0: aload_0<br>         1: invokespecial #1                  // Method java/lang/Object.”<init>“:()V<br>         4: return<br>      LineNumberTable:<br>        line 3: 0<br>      LocalVariableTable:<br>        Start  Length  Slot  Name   Signature<br>            0       5     0  this   Ldemo1/Demo05;</init></p>
+<p>  public static void main(java.lang.String[]);<br>    descriptor: ([Ljava/lang/String;)V<br>    flags: ACC_PUBLIC, ACC_STATIC<br>    Code:<br>      stack=2, locals=3, args_size=1<br>         0: bipush        10<br>         2: istore_1<br>         3: iload_1<br>         4: iinc          1, 1<br>         7: iinc          1, 1<br>        10: iload_1<br>        11: iadd<br>        12: iload_1<br>        13: iinc          1, -1<br>        16: iadd<br>        17: istore_2<br>        18: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;<br>        21: iload_1<br>        22: invokevirtual #3                  // Method java/io/PrintStream.println:(I)V<br>        25: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;<br>        28: iload_2<br>        29: invokevirtual #3                  // Method java/io/PrintStream.println:(I)V<br>        32: return<br>      LineNumberTable:<br>        line 5: 0<br>        line 6: 3<br>        line 7: 18<br>        line 8: 25<br>        line 9: 32<br>      LocalVariableTable:<br>        Start  Length  Slot  Name   Signature<br>            0      33     0  args   [Ljava/lang/String;<br>            3      30     1     a   I<br>           18      15     2     b   I<br>}<br>SourceFile: “Demo05.java”<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">现在我们逐行来分析反编译后的字节码</span><br></pre></td></tr></table></figure></p>
+<p>Classfile /E:/workplace/jvmStudy/out/production/jvmStudy/demo1/Demo05.class //字节码原文件所在位置<br>  Last modified 2020-2-23; size 567 bytes //最后修改时间,以及文件大小<br>  MD5 checksum e378885aa1eef9f5fd48fda536b4467b  //MD5签名<br>  Compiled from “Demo05.java” //字节码文件是由哪个文件编译得来的<br>public class demo1.Demo05 //类名<br>  minor version: 0  // 小版本号<br>  major version: 52 //大版本号  52 对应java8<br>  flags: ACC_PUBLIC, ACC_SUPER //ACC_PUBLIC表示类的访问修饰符为Public ACC_SUPER,具体见表1<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## 表1 类访问标记（access flags）</span><br><span class="line"></span><br><span class="line">| Flag Name      | Value | Interpretation      |</span><br><span class="line">| -------------- | ----- | ------------------- |</span><br><span class="line">| ACC_PUBLIC     | 1     | 标识是否是 public        |</span><br><span class="line">| ACC_FINAL      | 10    | 标识是否是 final         |</span><br><span class="line">| ACC_SUPER      | 20    | 已经不用了               |</span><br><span class="line">| ACC_INTERFACE  | 200   | 标识是类还是接口            |</span><br><span class="line">| ACC_ABSTRACT   | 400   | 标识是否是 abstract      |</span><br><span class="line">| ACC_SYNTHETIC  | 1000  | 编译器自动生成，不是用户源代码编译生成 |</span><br><span class="line">| ACC_ANNOTATION | 2000  | 标识是否是注解类            |</span><br><span class="line">| ACC_ENUM       | 4000  | 标识是否是枚举类            |</span><br><span class="line"></span><br><span class="line">---</span><br></pre></td></tr></table></figure></p>
+<p>Constant pool:</p>
+<p>   #1 = Methodref          #5.#22         // java/lang/Object.”<init>“:()V</init></p>
+<p>   #2 = Fieldref           #23.#24        // java/lang/System.out:Ljava/io/PrintStream;</p>
+<p>   #3 = Methodref          #25.#26        // java/io/PrintStream.println:(I)V</p>
+<p>   #4 = Class              #27            // demo1/Demo05</p>
+<p>   #5 = Class              #28            // java/lang/Object</p>
+<p>   #6 = Utf8               <init></init></p>
+<p>   #7 = Utf8               ()V</p>
+<p>   #8 = Utf8               Code</p>
+<p>   #9 = Utf8               LineNumberTable</p>
+<p>  #10 = Utf8               LocalVariableTable</p>
+<p>  #11 = Utf8               this</p>
+<p>  #12 = Utf8               Ldemo1/Demo05;</p>
+<p>  #13 = Utf8               main</p>
+<p>  #14 = Utf8               ([Ljava/lang/String;)V</p>
+<p>  #15 = Utf8               args</p>
+<p>  #16 = Utf8               [Ljava/lang/String;</p>
+<p>  #17 = Utf8               a</p>
+<p>  #18 = Utf8               I</p>
+<p>  #19 = Utf8               b</p>
+<p>  #20 = Utf8               SourceFile</p>
+<p>  #21 = Utf8               Demo05.java</p>
+<p>  #22 = NameAndType        #6:#7          // “<init>“:()V</init></p>
+<p>  #23 = Class              #29            // java/lang/System</p>
+<p>  #24 = NameAndType        #30:#31        // out:Ljava/io/PrintStream;</p>
+<p>  #25 = Class              #32            // java/io/PrintStream</p>
+<p>  #26 = NameAndType        #33:#34        // println:(I)V</p>
+<p>  #27 = Utf8               demo1/Demo05</p>
+<p>  #28 = Utf8               java/lang/Object</p>
+<p>  #29 = Utf8               java/lang/System</p>
+<p>  #30 = Utf8               out</p>
+<p>  #31 = Utf8               Ljava/io/PrintStream;</p>
+<p>  #32 = Utf8               java/io/PrintStream</p>
+<p>  #33 = Utf8               println</p>
+<p>  #34 = Utf8               (I)V<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">上面类的内容为该类的常量池</span><br><span class="line"></span><br><span class="line">1. 第一列 #+数字代表常量池的编号</span><br><span class="line">2. 第二列 Utf8/NameAndType........ 代表常量的类型</span><br><span class="line">3. 第三列表示常量的具体数值,如果是#+数字,表示引用其他常量数据</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">然后我们来看下构造方法,虽然我们没有显示的写一个构造方法,但是在编译的时候,会默认创建一个无参的构造方法,</span><br><span class="line"></span><br><span class="line">从下面的字节码可以看出:</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">public demo1.Demo05();  //Demo05方法</span><br><span class="line">    descriptor: ()V     //参数为空,返回值为void ---V代表Void 也就是无返回值</span><br><span class="line">    flags: ACC_PUBLIC   //表示方法的访问标记，是 public、private 还是 protected，是否是 static，是否是 final 等 具体见表1。</span><br><span class="line">    Code:   // 方法体</span><br><span class="line">      stack=1, locals=1, args_size=1   // 栈帧深度为1  局部变量表中变量数为1  该方法的形参个数。如果是实例方法，第一个形参是this引用。</span><br><span class="line">         0: aload_0           //aload 表示加载本地变量表的数据,这里表示加载本地变量表中第一条数据,为this</span><br><span class="line">         1: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V   </span><br><span class="line">         // 调用Object.init方法 </span><br><span class="line">         4: return   //返回</span><br><span class="line">      LineNumberTable:   //行号表,表示Code的字节码对应代码的行号</span><br><span class="line">        line 3: 0</span><br><span class="line">          </span><br><span class="line">          </span><br><span class="line">        /*</span><br><span class="line">        *  局部变量表  </span><br><span class="line">        *  start表示从Code的字节码第几行开始创建该局部变量</span><br><span class="line">        *  Length表示变量的生命周期  code字节码中的(0-4),所以为5</span><br><span class="line">        *  Slot 表示变量的序号</span><br><span class="line">        *  Name 表示变量名</span><br><span class="line">        *  Name 表示变量引用</span><br><span class="line">        */</span><br><span class="line">      LocalVariableTable:  </span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0       5     0  this   Ldemo1/Demo05;</span><br></pre></td></tr></table></figure></p>
+<p>备注:每个方法会创建一个栈帧.类似于一个先进后(FILO)出的队列</p>
+<h2 id="表2-方法访问标记（access-flags）"><a href="#表2-方法访问标记（access-flags）" class="headerlink" title="表2 方法访问标记（access flags）"></a>表2 方法访问标记（access flags）</h2><p>方法的访问标记比类和字段的访问标记类型更丰富，有 12 种之多，如小表所示：</p>
+<table>
+<thead>
+<tr>
+<th>方法访问标记</th>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ACC_PUBLIC</td>
+<td>0x0001</td>
+<td>声明为 public</td>
+</tr>
+<tr>
+<td>ACC_PRIVATE</td>
+<td>0x0002</td>
+<td>声明为 private</td>
+</tr>
+<tr>
+<td>ACC_PROTECTED</td>
+<td>0x0004</td>
+<td>声明为 protected</td>
+</tr>
+<tr>
+<td>ACC_STATIC</td>
+<td>0x0008</td>
+<td>声明为 static</td>
+</tr>
+<tr>
+<td>ACC_FINAL</td>
+<td>0x0010</td>
+<td>声明为 final</td>
+</tr>
+<tr>
+<td>ACC_SYNCHRONIZED</td>
+<td>0x0020</td>
+<td>声明为 synchronized</td>
+</tr>
+<tr>
+<td>ACC_BRIDGE</td>
+<td>0x0040</td>
+<td>bridge 方法, 由编译器生成</td>
+</tr>
+<tr>
+<td>ACC_VARARGS</td>
+<td>0x0080</td>
+<td>方法包含可变长度参数，比如 String… args</td>
+</tr>
+<tr>
+<td>ACC_NATIVE</td>
+<td>0x0100</td>
+<td>声明为 native</td>
+</tr>
+<tr>
+<td>ACC_ABSTRACT</td>
+<td>0x0400</td>
+<td>声明为 abstract</td>
+</tr>
+<tr>
+<td>ACC_STRICT</td>
+<td>0x0800</td>
+<td>声明为 strictfp，表示使用 IEEE-754 规范的精确浮点数，极少使用</td>
+</tr>
+<tr>
+<td>ACC_SYNTHETIC</td>
+<td>0x1000</td>
+<td>表示这个方法是由编译器自动生成，而不是用户代码编译产生</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><strong>重点来了</strong></p>
+<p>下面我们来看Main方法的字节码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">public static void main(java.lang.String[]);     //main方法</span><br><span class="line">	/*</span><br><span class="line">	*  方法参数为String[],最左面的[表示为数字,二维数组则为[[, --L***;--表示引用类型  </span><br><span class="line">	*   返回值为V 也就是前面说的Void</span><br><span class="line">	*/</span><br><span class="line">    descriptor: ([Ljava/lang/String;)V </span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC  //方法访问表示,Public static</span><br><span class="line">    Code:    // 方法具体的字节码</span><br><span class="line">      stack=2, locals=3, args_size=1   // 栈帧深度为2,方法变量表变量数为3,该方法的形参个数。因为是静态方法,不需要类引用,也就不需要this,所以只有一个String[]</span><br><span class="line">         0: bipush        10           //加载常量 10</span><br><span class="line">         2: istore_1                   //将10放入局部变量表序号为1的槽位中</span><br><span class="line">         3: iload_1                    // 将局部变量表序号为1的数据加载到栈帧(1),此时数据为10</span><br><span class="line">         4: iinc          1, 1         //innc 表示在局部变量表中进行自增运算,第一个1表示局部变量表中槽位的序号,第二个数表示自增的数值</span><br><span class="line">         7: iinc          1, 1         // 在执行一次自增   执行过后局部变量表1槽位的数为 12</span><br><span class="line">        10: iload_1                    // 将局部变量表序号为1的数据加载到栈帧(2),此时数据为12</span><br><span class="line">        11: iadd                       //iadd 表示取出栈顶两个数,进行相加,然后放入栈中 执行过后 栈中只有一个数,22</span><br><span class="line">        12: iload_1                    // 将局部变量表序号为1的数据加载到栈帧(2),此时数据为12</span><br><span class="line">        13: iinc          1, -1        // 进行自减,在局部变量表中操作,不影响栈中数据,局部变量表中数改为11 </span><br><span class="line">        16: iadd                       //将栈顶两个数相加,为34,并将结果放入栈顶</span><br><span class="line">        17: istore_2                   // 将栈顶数字取出 放入局部变量表为2的槽位</span><br><span class="line">        18: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;     // 引用常量池2号的常量,为System.out类</span><br><span class="line">        21: iload_1                     //将局部变量表中1槽位的11加载入栈</span><br><span class="line">        22: invokevirtual #3                  // Method java/io/PrintStream.println:(I)V</span><br><span class="line">        //调用打印方法(后面方法与前面相同,就不详细解释了)</span><br><span class="line">        25: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">        28: iload_2</span><br><span class="line">        29: invokevirtual #3                  // Method java/io/PrintStream.println:(I)V</span><br><span class="line">        32: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 5: 0</span><br><span class="line">        line 6: 3</span><br><span class="line">        line 7: 18</span><br><span class="line">        line 8: 25</span><br><span class="line">        line 9: 32</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0      33     0  args   [Ljava/lang/String;</span><br><span class="line">            3      30     1     a   I</span><br><span class="line">           18      15     2     b   I</span><br></pre></td></tr></table></figure>
+<p>从上面的字节码可以看出,i++ 和++i 的操作与其他操作不同</p>
+<ol>
+<li>直接在局部变量表中操作.</li>
+<li>i++ 是先从局部变量表中加载到栈中,然后再局部变量表中运算</li>
+<li>++i  是先在局部变量表中运算,然后再加载到栈中</li>
+</ol>
+<hr>
+<p>这就是为什么i++ 先返回,后相加;++i是先相加后返回.也就是上面面试题打印结果为11,34的原因.</p>
+<hr>
+<p>以上紧为个人观点,如有错误,欢迎指正.谢谢!</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://cxzd.space/2020/02/16/通过一道面试题来学习StringTable/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -847,6 +1181,206 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://cxzd.space/2017/08/18/守护线程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wayne Cui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wayne">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/18/守护线程/" itemprop="url">守护线程</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-18T15:41:18+08:00">
+                2017-08-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/多线程/" itemprop="url" rel="index">
+                    <span itemprop="name">多线程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,466
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  6
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="守护线程"><a href="#守护线程" class="headerlink" title="守护线程"></a>守护线程</h1><h2 id="线程分类"><a href="#线程分类" class="headerlink" title="线程分类"></a>线程分类</h2><pre><code>Java的线程分为两种：User Thread（用户线程）、DaemonThread（守护线程）。
+</code></pre><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><pre><code>守护线程：守护线程--也称“服务线程”，在没有用户线程可服务时会自动离开。
+</code></pre><h2 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h2><pre><code>守护线程的优先级比较低，用于为系统中的其他对象和线程提供服务。
+</code></pre><h2 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h2><pre><code>通过设置`setDaemon(true)`来设置线程为“守护线程”；将一个用户线程设置为守护线程的方式是在线程创建对象之前，用线程对象的`setDaemon`方法。**example:**垃圾回收线程就是一个经典的守护线程，当我们的程序中不再有任何运行的**Thread**，程序就不会再产生垃圾，垃圾回收器也就无事可做，所以当JVM上没有用户线程时。垃圾回收线程会自动离开。它使用在低级别的状态中运行，用于实时监控和管理系统中的可回收资源。
+
+设置的方法如下：
+</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Thread daemonThread  = <span class="keyword">new</span> Thread();</span><br><span class="line"><span class="comment">//设定 daemonthread 为守护线程，default false(非守护线程)</span></span><br><span class="line">daemonThread.setDaemon(<span class="keyword">true</span>);</span><br><span class="line"><span class="comment">//验证当前线程是否为守护线程，返回true则为守护线程</span></span><br><span class="line">daemonThread.isDaemon();</span><br></pre></td></tr></table></figure>
+<h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><pre><code>**守护进程（Deaemon）**是运行在后台的一种特殊进程。它独立于控制终端并且周期性地执行某种任务或等待处理某些发生的事件。也就是说守护线程不依赖于终端，但是依赖于系统，于系统”同生共死“。那Java的守护线程是什么样子的呢？当JVM中所有的线程都是守护线程的时候，JVM就可以退出了；如果还有一个以上的非守护线程则JVM不会退出。
+
+用个比较通俗的比喻，任何一个守护线程都是整个JVM中所有非守护线程的保护：==只要当前JVM实例中尚存在任何一个非守护线程没有结束，守护线程就全部工作==；只有当最后一个非守护线程结束时，守护线程随着JVM一同结束工作。**Daemon**的作用是为其他线程的运行提供便利服务，守护线程最典型的应用就是GC(垃圾回收器),它就是一个很称职的守护者。User和Daemon两者几乎没有区别，唯一的不同之处就在于虚拟机的离开：如何User Thread 已经全部退出运行了，只剩下Daemon Thread存在了，虚拟机也就退出了.因为没有了被守护者，Daemon也就没有工作可做了也就没有继续运行程序的必要了。
+</code></pre><h2 id="守护线程的注意点"><a href="#守护线程的注意点" class="headerlink" title="守护线程的注意点"></a>守护线程的注意点</h2><ol>
+<li><code>thread.setDaemon(true)</code>必须在<code>thread.start()</code>之前设置，否则会报一个<code>IllegalThreadStateException</code>异常。你不能把一个正在运行的常规线程设置为守护线程。</li>
+<li>在<strong>Daemon</strong>线程中产生的新线程也是<strong>Daemon</strong>的。</li>
+<li>不要认为所有的应用都可以分配给<strong>Daemon</strong>来进行服务，比如读写操作或者计算逻辑。（不能保证，当用户进程都退出了，守护进程的读写任务是否完成，及时没有完成，守护进程也会自动退出）</li>
+<li>写Java多线程程序时，一般比较喜欢用java自带的多线程框架，比如<strong>ExecutorService</strong>，但是Java的线程池会将守护线程转换为用户线程，所以如果使用守护线程，就不能用Java的线程池。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//完成文件输出的守护线程任务  </span></span><br><span class="line"><span class="keyword">import</span> java.io.*;     </span><br><span class="line">    </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestRunnable</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;     </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;     </span><br><span class="line">               <span class="keyword">try</span>&#123;     </span><br><span class="line">                  Thread.sleep(<span class="number">1000</span>);<span class="comment">//守护线程阻塞1秒后运行     </span></span><br><span class="line">                  File f=<span class="keyword">new</span> File(<span class="string">"daemon.txt"</span>);     </span><br><span class="line">                  FileOutputStream os=<span class="keyword">new</span> FileOutputStream(f,<span class="keyword">true</span>);     </span><br><span class="line">                  os.write(<span class="string">"daemon"</span>.getBytes());     </span><br><span class="line">           &#125;     </span><br><span class="line">               <span class="keyword">catch</span>(IOException e1)&#123;     </span><br><span class="line">          e1.printStackTrace();     </span><br><span class="line">               &#125;     </span><br><span class="line">               <span class="keyword">catch</span>(InterruptedException e2)&#123;     </span><br><span class="line">                  e2.printStackTrace();     </span><br><span class="line">           &#125;     </span><br><span class="line">    &#125;     </span><br><span class="line">&#125;     </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDemo2</span></span>&#123;     </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException     </span></span><br><span class="line"><span class="function">    </span>&#123;     </span><br><span class="line">        Runnable tr=<span class="keyword">new</span> TestRunnable();     </span><br><span class="line">        Thread thread=<span class="keyword">new</span> Thread(tr);     </span><br><span class="line">                thread.setDaemon(<span class="keyword">true</span>); <span class="comment">//设置守护线程     </span></span><br><span class="line">        thread.start(); <span class="comment">//开始执行分进程     </span></span><br><span class="line">    &#125;     </span><br><span class="line">&#125;     </span><br><span class="line"><span class="comment">//运行结果：文件daemon.txt中没有"daemon"字符串。</span></span><br></pre></td></tr></table></figure>
+<pre><code>原因很简单，知道主线程完成，守护线程仍处于1秒的阻塞状态。这个时候主线程很快就运行完了，虚拟机退出，**Daemon**停止服务，输出操作自然失败了。
+</code></pre><hr>
+<p>线程池中将daemon线程转换为用户线程的程序片段。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultThreadFactory</span> <span class="keyword">implements</span> <span class="title">ThreadFactory</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> AtomicInteger poolNumber = <span class="keyword">new</span> AtomicInteger(<span class="number">1</span>);  </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ThreadGroup group;  </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AtomicInteger threadNumber = <span class="keyword">new</span> AtomicInteger(<span class="number">1</span>);  </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String namePrefix;  </span><br><span class="line">   </span><br><span class="line">    DefaultThreadFactory() &#123;  </span><br><span class="line">        SecurityManager s = System.getSecurityManager();  </span><br><span class="line">        group = (s != <span class="keyword">null</span>) ? s.getThreadGroup() :  </span><br><span class="line">                              Thread.currentThread().getThreadGroup();  </span><br><span class="line">        namePrefix = <span class="string">"pool-"</span> +  </span><br><span class="line">                      poolNumber.getAndIncrement() +  </span><br><span class="line">                     <span class="string">"-thread-"</span>;  </span><br><span class="line">    &#125;  </span><br><span class="line">   </span><br><span class="line">    <span class="function"><span class="keyword">public</span> Thread <span class="title">newThread</span><span class="params">(Runnable r)</span> </span>&#123;  </span><br><span class="line">        Thread t = <span class="keyword">new</span> Thread(group, r,  </span><br><span class="line">                              namePrefix + threadNumber.getAndIncrement(),  </span><br><span class="line">                              <span class="number">0</span>);  </span><br><span class="line">        <span class="keyword">if</span> (t.isDaemon())  </span><br><span class="line">            t.setDaemon(<span class="keyword">false</span>);  </span><br><span class="line">        <span class="keyword">if</span> (t.getPriority() != Thread.NORM_PRIORITY)  </span><br><span class="line">            t.setPriority(Thread.NORM_PRIORITY);  </span><br><span class="line">        <span class="keyword">return</span> t;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code>注意到，这里不仅会将守护线程转变为用户线程，而且会把优先级转变为**Thread.NORM_PRIORITY**。
+
+如下所示，将守护线程采用线程池的方式开启：
+</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DaemonThreadTest</span>  </span></span><br><span class="line"><span class="class"></span>&#123;  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span>  </span></span><br><span class="line"><span class="function">    </span>&#123;  </span><br><span class="line">        Thread mainThread = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable()&#123;  </span><br><span class="line">            <span class="meta">@Override</span> </span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span>  </span></span><br><span class="line"><span class="function">            </span>&#123;  </span><br><span class="line">                ExecutorService exec = Executors.newCachedThreadPool();  </span><br><span class="line">                Thread childThread = <span class="keyword">new</span> Thread(<span class="keyword">new</span> ClildThread());  </span><br><span class="line">                childThread.setDaemon(<span class="keyword">true</span>);  </span><br><span class="line">                exec.execute(childThread);  </span><br><span class="line">                exec.shutdown();  </span><br><span class="line">                System.out.println(<span class="string">"I'm main thread..."</span>);  </span><br><span class="line">            &#125;  </span><br><span class="line">        &#125;);  </span><br><span class="line">        mainThread.start();  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br><span class="line">   </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ClildThread</span> <span class="keyword">implements</span> <span class="title">Runnable</span>  </span></span><br><span class="line"><span class="class"></span>&#123;  </span><br><span class="line">    <span class="meta">@Override</span> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span>  </span></span><br><span class="line"><span class="function">    </span>&#123;  </span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>)  </span><br><span class="line">        &#123;  </span><br><span class="line">            System.out.println(<span class="string">"I'm child thread.."</span>);  </span><br><span class="line">            <span class="keyword">try</span> </span><br><span class="line">            &#123;  </span><br><span class="line">                TimeUnit.MILLISECONDS.sleep(<span class="number">1000</span>);  </span><br><span class="line">            &#125;  </span><br><span class="line">            <span class="keyword">catch</span> (InterruptedException e)  </span><br><span class="line">            &#123;  </span><br><span class="line">                e.printStackTrace();  </span><br><span class="line">            &#125;  </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code>运行结果：
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">I&apos;m main thread...  </span><br><span class="line">I&apos;m child thread..  </span><br><span class="line">I&apos;m child thread..  </span><br><span class="line">I&apos;m child thread..  </span><br><span class="line">I&apos;m child thread..  </span><br><span class="line">I&apos;m child thread..  </span><br><span class="line">I&apos;m child thread..  </span><br><span class="line">I&apos;m child thread..  </span><br><span class="line">I&apos;m child thread..  </span><br><span class="line">I&apos;m child thread..（无限输出）</span><br></pre></td></tr></table></figure>
+<p>上面代码证实了线程池会将守护线程转变为用户线程。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://cxzd.space/2017/08/18/Typora使用说明/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1102,206 +1636,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://cxzd.space/2017/08/18/守护线程/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Wayne Cui">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/header2.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Wayne">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/08/18/守护线程/" itemprop="url">守护线程</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-18T15:41:18+08:00">
-                2017-08-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/多线程/" itemprop="url" rel="index">
-                    <span itemprop="name">多线程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,466
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  6
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="守护线程"><a href="#守护线程" class="headerlink" title="守护线程"></a>守护线程</h1><h2 id="线程分类"><a href="#线程分类" class="headerlink" title="线程分类"></a>线程分类</h2><pre><code>Java的线程分为两种：User Thread（用户线程）、DaemonThread（守护线程）。
-</code></pre><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><pre><code>守护线程：守护线程--也称“服务线程”，在没有用户线程可服务时会自动离开。
-</code></pre><h2 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h2><pre><code>守护线程的优先级比较低，用于为系统中的其他对象和线程提供服务。
-</code></pre><h2 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h2><pre><code>通过设置`setDaemon(true)`来设置线程为“守护线程”；将一个用户线程设置为守护线程的方式是在线程创建对象之前，用线程对象的`setDaemon`方法。**example:**垃圾回收线程就是一个经典的守护线程，当我们的程序中不再有任何运行的**Thread**，程序就不会再产生垃圾，垃圾回收器也就无事可做，所以当JVM上没有用户线程时。垃圾回收线程会自动离开。它使用在低级别的状态中运行，用于实时监控和管理系统中的可回收资源。
-
-设置的方法如下：
-</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Thread daemonThread  = <span class="keyword">new</span> Thread();</span><br><span class="line"><span class="comment">//设定 daemonthread 为守护线程，default false(非守护线程)</span></span><br><span class="line">daemonThread.setDaemon(<span class="keyword">true</span>);</span><br><span class="line"><span class="comment">//验证当前线程是否为守护线程，返回true则为守护线程</span></span><br><span class="line">daemonThread.isDaemon();</span><br></pre></td></tr></table></figure>
-<h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><pre><code>**守护进程（Deaemon）**是运行在后台的一种特殊进程。它独立于控制终端并且周期性地执行某种任务或等待处理某些发生的事件。也就是说守护线程不依赖于终端，但是依赖于系统，于系统”同生共死“。那Java的守护线程是什么样子的呢？当JVM中所有的线程都是守护线程的时候，JVM就可以退出了；如果还有一个以上的非守护线程则JVM不会退出。
-
-用个比较通俗的比喻，任何一个守护线程都是整个JVM中所有非守护线程的保护：==只要当前JVM实例中尚存在任何一个非守护线程没有结束，守护线程就全部工作==；只有当最后一个非守护线程结束时，守护线程随着JVM一同结束工作。**Daemon**的作用是为其他线程的运行提供便利服务，守护线程最典型的应用就是GC(垃圾回收器),它就是一个很称职的守护者。User和Daemon两者几乎没有区别，唯一的不同之处就在于虚拟机的离开：如何User Thread 已经全部退出运行了，只剩下Daemon Thread存在了，虚拟机也就退出了.因为没有了被守护者，Daemon也就没有工作可做了也就没有继续运行程序的必要了。
-</code></pre><h2 id="守护线程的注意点"><a href="#守护线程的注意点" class="headerlink" title="守护线程的注意点"></a>守护线程的注意点</h2><ol>
-<li><code>thread.setDaemon(true)</code>必须在<code>thread.start()</code>之前设置，否则会报一个<code>IllegalThreadStateException</code>异常。你不能把一个正在运行的常规线程设置为守护线程。</li>
-<li>在<strong>Daemon</strong>线程中产生的新线程也是<strong>Daemon</strong>的。</li>
-<li>不要认为所有的应用都可以分配给<strong>Daemon</strong>来进行服务，比如读写操作或者计算逻辑。（不能保证，当用户进程都退出了，守护进程的读写任务是否完成，及时没有完成，守护进程也会自动退出）</li>
-<li>写Java多线程程序时，一般比较喜欢用java自带的多线程框架，比如<strong>ExecutorService</strong>，但是Java的线程池会将守护线程转换为用户线程，所以如果使用守护线程，就不能用Java的线程池。</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//完成文件输出的守护线程任务  </span></span><br><span class="line"><span class="keyword">import</span> java.io.*;     </span><br><span class="line">    </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestRunnable</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;     </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;     </span><br><span class="line">               <span class="keyword">try</span>&#123;     </span><br><span class="line">                  Thread.sleep(<span class="number">1000</span>);<span class="comment">//守护线程阻塞1秒后运行     </span></span><br><span class="line">                  File f=<span class="keyword">new</span> File(<span class="string">"daemon.txt"</span>);     </span><br><span class="line">                  FileOutputStream os=<span class="keyword">new</span> FileOutputStream(f,<span class="keyword">true</span>);     </span><br><span class="line">                  os.write(<span class="string">"daemon"</span>.getBytes());     </span><br><span class="line">           &#125;     </span><br><span class="line">               <span class="keyword">catch</span>(IOException e1)&#123;     </span><br><span class="line">          e1.printStackTrace();     </span><br><span class="line">               &#125;     </span><br><span class="line">               <span class="keyword">catch</span>(InterruptedException e2)&#123;     </span><br><span class="line">                  e2.printStackTrace();     </span><br><span class="line">           &#125;     </span><br><span class="line">    &#125;     </span><br><span class="line">&#125;     </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDemo2</span></span>&#123;     </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException     </span></span><br><span class="line"><span class="function">    </span>&#123;     </span><br><span class="line">        Runnable tr=<span class="keyword">new</span> TestRunnable();     </span><br><span class="line">        Thread thread=<span class="keyword">new</span> Thread(tr);     </span><br><span class="line">                thread.setDaemon(<span class="keyword">true</span>); <span class="comment">//设置守护线程     </span></span><br><span class="line">        thread.start(); <span class="comment">//开始执行分进程     </span></span><br><span class="line">    &#125;     </span><br><span class="line">&#125;     </span><br><span class="line"><span class="comment">//运行结果：文件daemon.txt中没有"daemon"字符串。</span></span><br></pre></td></tr></table></figure>
-<pre><code>原因很简单，知道主线程完成，守护线程仍处于1秒的阻塞状态。这个时候主线程很快就运行完了，虚拟机退出，**Daemon**停止服务，输出操作自然失败了。
-</code></pre><hr>
-<p>线程池中将daemon线程转换为用户线程的程序片段。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultThreadFactory</span> <span class="keyword">implements</span> <span class="title">ThreadFactory</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> AtomicInteger poolNumber = <span class="keyword">new</span> AtomicInteger(<span class="number">1</span>);  </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ThreadGroup group;  </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AtomicInteger threadNumber = <span class="keyword">new</span> AtomicInteger(<span class="number">1</span>);  </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String namePrefix;  </span><br><span class="line">   </span><br><span class="line">    DefaultThreadFactory() &#123;  </span><br><span class="line">        SecurityManager s = System.getSecurityManager();  </span><br><span class="line">        group = (s != <span class="keyword">null</span>) ? s.getThreadGroup() :  </span><br><span class="line">                              Thread.currentThread().getThreadGroup();  </span><br><span class="line">        namePrefix = <span class="string">"pool-"</span> +  </span><br><span class="line">                      poolNumber.getAndIncrement() +  </span><br><span class="line">                     <span class="string">"-thread-"</span>;  </span><br><span class="line">    &#125;  </span><br><span class="line">   </span><br><span class="line">    <span class="function"><span class="keyword">public</span> Thread <span class="title">newThread</span><span class="params">(Runnable r)</span> </span>&#123;  </span><br><span class="line">        Thread t = <span class="keyword">new</span> Thread(group, r,  </span><br><span class="line">                              namePrefix + threadNumber.getAndIncrement(),  </span><br><span class="line">                              <span class="number">0</span>);  </span><br><span class="line">        <span class="keyword">if</span> (t.isDaemon())  </span><br><span class="line">            t.setDaemon(<span class="keyword">false</span>);  </span><br><span class="line">        <span class="keyword">if</span> (t.getPriority() != Thread.NORM_PRIORITY)  </span><br><span class="line">            t.setPriority(Thread.NORM_PRIORITY);  </span><br><span class="line">        <span class="keyword">return</span> t;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<pre><code>注意到，这里不仅会将守护线程转变为用户线程，而且会把优先级转变为**Thread.NORM_PRIORITY**。
-
-如下所示，将守护线程采用线程池的方式开启：
-</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DaemonThreadTest</span>  </span></span><br><span class="line"><span class="class"></span>&#123;  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span>  </span></span><br><span class="line"><span class="function">    </span>&#123;  </span><br><span class="line">        Thread mainThread = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable()&#123;  </span><br><span class="line">            <span class="meta">@Override</span> </span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span>  </span></span><br><span class="line"><span class="function">            </span>&#123;  </span><br><span class="line">                ExecutorService exec = Executors.newCachedThreadPool();  </span><br><span class="line">                Thread childThread = <span class="keyword">new</span> Thread(<span class="keyword">new</span> ClildThread());  </span><br><span class="line">                childThread.setDaemon(<span class="keyword">true</span>);  </span><br><span class="line">                exec.execute(childThread);  </span><br><span class="line">                exec.shutdown();  </span><br><span class="line">                System.out.println(<span class="string">"I'm main thread..."</span>);  </span><br><span class="line">            &#125;  </span><br><span class="line">        &#125;);  </span><br><span class="line">        mainThread.start();  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br><span class="line">   </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ClildThread</span> <span class="keyword">implements</span> <span class="title">Runnable</span>  </span></span><br><span class="line"><span class="class"></span>&#123;  </span><br><span class="line">    <span class="meta">@Override</span> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span>  </span></span><br><span class="line"><span class="function">    </span>&#123;  </span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>)  </span><br><span class="line">        &#123;  </span><br><span class="line">            System.out.println(<span class="string">"I'm child thread.."</span>);  </span><br><span class="line">            <span class="keyword">try</span> </span><br><span class="line">            &#123;  </span><br><span class="line">                TimeUnit.MILLISECONDS.sleep(<span class="number">1000</span>);  </span><br><span class="line">            &#125;  </span><br><span class="line">            <span class="keyword">catch</span> (InterruptedException e)  </span><br><span class="line">            &#123;  </span><br><span class="line">                e.printStackTrace();  </span><br><span class="line">            &#125;  </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<pre><code>运行结果：
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">I&apos;m main thread...  </span><br><span class="line">I&apos;m child thread..  </span><br><span class="line">I&apos;m child thread..  </span><br><span class="line">I&apos;m child thread..  </span><br><span class="line">I&apos;m child thread..  </span><br><span class="line">I&apos;m child thread..  </span><br><span class="line">I&apos;m child thread..  </span><br><span class="line">I&apos;m child thread..  </span><br><span class="line">I&apos;m child thread..  </span><br><span class="line">I&apos;m child thread..（无限输出）</span><br></pre></td></tr></table></figure>
-<p>上面代码证实了线程池会将守护线程转变为用户线程。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1352,7 +1686,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1363,7 +1697,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1374,7 +1708,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
