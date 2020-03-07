@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="JVM,语法糖," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="编译期语法糖(二)foreach循环在JDK5以后,开始引入的一种新的语法糖.支持数组和集合的遍历. 我们先来看数组: 12345678public class Demo05_1 &amp;#123;    public static void main(String[] args) &amp;#123;        int[] arr = &amp;#123;1,2,3,4,5&amp;#125;;// 数组初始化的语法也是">
+<meta name="keywords" content="JVM,语法糖">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编译期语法糖(二)">
+<meta property="og:url" content="http://cxzd.space/2020/03/07/编译期语法糖(二)/index.html">
+<meta property="og:site_name" content="Wayne">
+<meta property="og:description" content="编译期语法糖(二)foreach循环在JDK5以后,开始引入的一种新的语法糖.支持数组和集合的遍历. 我们先来看数组: 12345678public class Demo05_1 &amp;#123;    public static void main(String[] args) &amp;#123;        int[] arr = &amp;#123;1,2,3,4,5&amp;#125;;// 数组初始化的语法也是">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-03-07T14:12:53.912Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="编译期语法糖(二)">
+<meta name="twitter:description" content="编译期语法糖(二)foreach循环在JDK5以后,开始引入的一种新的语法糖.支持数组和集合的遍历. 我们先来看数组: 12345678public class Demo05_1 &amp;#123;    public static void main(String[] args) &amp;#123;        int[] arr = &amp;#123;1,2,3,4,5&amp;#125;;// 数组初始化的语法也是">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://cxzd.space/2020/03/07/编译期语法糖(二)/"/>
+
+
+
+
+
+  <title>编译期语法糖(二) | Wayne</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wayne</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">记录学习的技能和遇到的问题</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://cxzd.space/2020/03/07/编译期语法糖(二)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wayne Cui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wayne">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">编译期语法糖(二)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-07T17:20:00+08:00">
+                2020-03-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,692
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  9
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="编译期语法糖-二"><a href="#编译期语法糖-二" class="headerlink" title="编译期语法糖(二)"></a>编译期语法糖(二)</h1><h2 id="foreach循环"><a href="#foreach循环" class="headerlink" title="foreach循环"></a>foreach循环</h2><p>在JDK5以后,开始引入的一种新的语法糖.支持数组和集合的遍历.</p>
+<p>我们先来看数组:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo05_1</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] arr = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>&#125;;<span class="comment">// 数组初始化的语法也是语法糖哦</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i : arr) &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们先通过javap命令反编译:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(java.lang.String[])</span></span>;</span><br><span class="line">    descriptor: ([Ljava/lang/String;)V</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=<span class="number">4</span>, locals=<span class="number">6</span>, args_size=<span class="number">1</span></span><br><span class="line">         <span class="number">0</span>: iconst_5                         </span><br><span class="line">         <span class="number">1</span>: newarray       <span class="keyword">int</span></span><br><span class="line">         <span class="number">3</span>: dup</span><br><span class="line">         <span class="number">4</span>: iconst_0</span><br><span class="line">         <span class="number">5</span>: iconst_1</span><br><span class="line">         <span class="number">6</span>: iastore</span><br><span class="line">         <span class="number">7</span>: dup</span><br><span class="line">         <span class="number">8</span>: iconst_1</span><br><span class="line">         <span class="number">9</span>: iconst_2</span><br><span class="line">        <span class="number">10</span>: iastore</span><br><span class="line">        <span class="number">11</span>: dup</span><br><span class="line">        <span class="number">12</span>: iconst_2</span><br><span class="line">        <span class="number">13</span>: iconst_3</span><br><span class="line">        <span class="number">14</span>: iastore</span><br><span class="line">        <span class="number">15</span>: dup</span><br><span class="line">        <span class="number">16</span>: iconst_3</span><br><span class="line">        <span class="number">17</span>: iconst_4</span><br><span class="line">        <span class="number">18</span>: iastore</span><br><span class="line">        <span class="number">19</span>: dup</span><br><span class="line">        <span class="number">20</span>: iconst_4</span><br><span class="line">        <span class="number">21</span>: iconst_5</span><br><span class="line">        <span class="number">22</span>: iastore</span><br><span class="line">        <span class="number">23</span>: astore_1</span><br><span class="line">        <span class="number">24</span>: aload_1</span><br><span class="line">        <span class="number">25</span>: astore_2</span><br><span class="line">        <span class="number">26</span>: aload_2</span><br><span class="line">        <span class="number">27</span>: arraylength</span><br><span class="line">        <span class="number">28</span>: istore_3</span><br><span class="line">        <span class="number">29</span>: iconst_0</span><br><span class="line">        <span class="number">30</span>: istore        <span class="number">4</span></span><br><span class="line">        <span class="number">32</span>: iload         <span class="number">4</span></span><br><span class="line">        <span class="number">34</span>: iload_3</span><br><span class="line">        <span class="number">35</span>: if_icmpge     <span class="number">58</span>              <span class="comment">// if_icmpge 指令的意思是如果一个值大于或等于另外一个</span></span><br><span class="line">        <span class="number">38</span>: aload_2</span><br><span class="line">        <span class="number">39</span>: iload         <span class="number">4</span></span><br><span class="line">        <span class="number">41</span>: iaload</span><br><span class="line">        <span class="number">42</span>: istore        <span class="number">5</span></span><br><span class="line">        44: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">        <span class="number">47</span>: iload         <span class="number">5</span></span><br><span class="line">        49: invokevirtual #3                  // Method java/io/PrintStream.println:(I)V</span><br><span class="line">        <span class="number">52</span>: iinc          <span class="number">4</span>, <span class="number">1</span></span><br><span class="line">        <span class="number">55</span>: goto          <span class="number">32</span></span><br><span class="line">        <span class="number">58</span>: <span class="keyword">return</span></span><br><span class="line">      LineNumberTable:</span><br><span class="line">        ...</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">       ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在指令的前 24条,就是新建数组队列的语法糖</p>
+<p>转换成对应的代码如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] arr = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">5</span>];</span><br><span class="line">       arr[<span class="number">0</span>] =<span class="number">1</span>;</span><br><span class="line">       arr[<span class="number">1</span>] =<span class="number">2</span>;</span><br><span class="line">       arr[<span class="number">2</span>] =<span class="number">3</span>;</span><br><span class="line">       arr[<span class="number">3</span>] =<span class="number">4</span>;</span><br><span class="line">       arr[<span class="number">4</span>] =<span class="number">5</span>;</span><br></pre></td></tr></table></figure>
+<p>然后我们再来分析后面的字节码,可以转换成对应的代码如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> length = arr.length;</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; length; i++) &#123;</span><br><span class="line">          System.out.println(arr[i]);</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出,foreach 也是编译成fori进行遍历</p>
+<hr>
+<p>集合进行foreach.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo05_2</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; list = Arrays.asList(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);</span><br><span class="line">        <span class="keyword">for</span> (Integer i : list) &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用javap进行反编译</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(java.lang.String[])</span></span>;</span><br><span class="line">    descriptor: ([Ljava/lang/String;)V</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=<span class="number">4</span>, locals=<span class="number">4</span>, args_size=<span class="number">1</span></span><br><span class="line">         <span class="number">0</span>: iconst_5</span><br><span class="line">         1: anewarray     #2                  // class java/lang/Integer</span><br><span class="line">         <span class="number">4</span>: dup</span><br><span class="line">         <span class="number">5</span>: iconst_0</span><br><span class="line">         <span class="number">6</span>: iconst_1</span><br><span class="line">         7: invokestatic  #3                  // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;</span><br><span class="line">        <span class="number">10</span>: aastore</span><br><span class="line">        <span class="number">11</span>: dup</span><br><span class="line">        <span class="number">12</span>: iconst_1</span><br><span class="line">        <span class="number">13</span>: iconst_2</span><br><span class="line">        14: invokestatic  #3                  // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;</span><br><span class="line">        <span class="number">17</span>: aastore</span><br><span class="line">        <span class="number">18</span>: dup</span><br><span class="line">        <span class="number">19</span>: iconst_2</span><br><span class="line">        <span class="number">20</span>: iconst_3</span><br><span class="line">        21: invokestatic  #3                  // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;</span><br><span class="line">        <span class="number">24</span>: aastore</span><br><span class="line">        <span class="number">25</span>: dup</span><br><span class="line">        <span class="number">26</span>: iconst_3</span><br><span class="line">        <span class="number">27</span>: iconst_4</span><br><span class="line">        28: invokestatic  #3                  // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;</span><br><span class="line">        <span class="number">31</span>: aastore</span><br><span class="line">        <span class="number">32</span>: dup</span><br><span class="line">        <span class="number">33</span>: iconst_4</span><br><span class="line">        <span class="number">34</span>: iconst_5</span><br><span class="line">        35: invokestatic  #3                  // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;</span><br><span class="line">        <span class="number">38</span>: aastore</span><br><span class="line">        39: invokestatic  #4                  // Method java/util/Arrays.asList:([Ljava/lang/Object;)Ljava/util/List;</span><br><span class="line">        <span class="number">42</span>: astore_1</span><br><span class="line">        <span class="number">43</span>: aload_1</span><br><span class="line">        44: invokeinterface #5,  1            // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;</span><br><span class="line">        <span class="number">49</span>: astore_2</span><br><span class="line">        <span class="number">50</span>: aload_2</span><br><span class="line">        51: invokeinterface #6,  1            // InterfaceMethod java/util/Iterator.hasNext:()Z</span><br><span class="line">        <span class="number">56</span>: ifeq          <span class="number">79</span></span><br><span class="line">        <span class="number">59</span>: aload_2</span><br><span class="line">        60: invokeinterface #7,  1            // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;</span><br><span class="line">        65: checkcast     #2                  // class java/lang/Integer</span><br><span class="line">        <span class="number">68</span>: astore_3</span><br><span class="line">        69: getstatic     #8                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">        <span class="number">72</span>: aload_3</span><br><span class="line">        73: invokevirtual #9                  // Method java/io/PrintStream.println:(Ljava/lang/Object;)V</span><br><span class="line">        <span class="number">76</span>: goto          <span class="number">50</span></span><br><span class="line">        <span class="number">79</span>: <span class="keyword">return</span></span><br><span class="line">      LineNumberTable:</span><br><span class="line">       ...</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">      ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 44: invokeinterface #5,  1            // InterfaceMethod java/util/List.iterator</p>
+<p>可以看出这里调用了list.iterator 方法</p>
+<p> 51: invokeinterface #6,  1            // InterfaceMethod java/util/Iterator.hasNext:()Z</p>
+<p>56: ifeq          79</p>
+<p>这里调用了iterator.hasNext()方法,且如果为false跳转到79行</p>
+<p> 60: invokeinterface #7,  1            // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;</p>
+<p> 65: checkcast     #2                  // class java/lang/Integer</p>
+<p>这里通过iterator.next()获取元素,且获取的元素类型为Object ,需要调用checkcat进行类型转换.</p>
+<p>所以,集合类的foreach方法语法糖可以翻译成如下代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">while(iterator.hasNext())&#123;</span><br><span class="line">          System.out.println(iterator.next());</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="switch语法糖"><a href="#switch语法糖" class="headerlink" title="switch语法糖"></a>switch语法糖</h1><h2 id="switch-String"><a href="#switch-String" class="headerlink" title="switch-String"></a>switch-String</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo05_3</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">choose</span><span class="params">(String str)</span></span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (str)&#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">"武松"</span>:</span><br><span class="line">                System.out.println(<span class="string">"打老虎"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">"鲁智深"</span>:</span><br><span class="line">                System.out.println(<span class="string">"倒拔垂杨柳!"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                System.out.println(<span class="string">"智取生辰纲"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后我们根据javap反编译</p>
+<p>我们直接翻译字节码,翻译后的代码如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">choose</span><span class="params">(String str)</span></span>&#123;</span><br><span class="line">        <span class="keyword">byte</span> i = -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">switch</span> (str.hashCode())&#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">878808</span>:</span><br><span class="line">                <span class="keyword">if</span>(str.equals(<span class="string">"武松"</span>))&#123;</span><br><span class="line">                    i= <span class="number">0</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">39343864</span>:</span><br><span class="line">                <span class="keyword">if</span>(str.equals(<span class="string">"鲁智深"</span>))&#123;</span><br><span class="line">                    i=<span class="number">2</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">switch</span> (i)&#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">                System.out.println(<span class="string">"打老虎"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">                System.out.println(<span class="string">"倒拔垂杨柳!"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                System.out.println(<span class="string">"智取生辰纲"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>可以,看出jvm将一个switch 拆分成两个switch来实现,然后再编译期,已经可以知道字符串的hashCode.</p>
+<p>但是因为可能出现两个字符串hashCode相同,但是不是同一个字符串的情况,所以再case中进行二次确认.</p>
+<p>为什么要在第一遍时比较hashCode,又要利用equals进行比较呢?</p>
+<p>这是因为利用hashCode可以提高比较效率,减少可能的比较;而equals比较是为了防止hashCode冲突.</p>
+<h2 id="switch-enum"><a href="#switch-enum" class="headerlink" title="switch-enum"></a>switch-enum</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo05_4</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printSex</span><span class="params">(Sex sex)</span></span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (sex)&#123;</span><br><span class="line">            <span class="keyword">case</span> MALE:</span><br><span class="line">                System.out.println(<span class="string">"男"</span>);</span><br><span class="line">            <span class="keyword">case</span> FEMALE:</span><br><span class="line">                System.out.println(<span class="string">"女"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">enum</span> Sex &#123;</span><br><span class="line">    MALE,FEMALE</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>反编译后</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">  public static void printSex(demo05.Sex);</span><br><span class="line">    descriptor: (Ldemo05/Sex;)V</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=2, locals=1, args_size=1</span><br><span class="line">         0: getstatic     #2                  // Field demo05/Demo05_4$1.$SwitchMap$demo05$Sex:[I</span><br><span class="line">         3: aload_0</span><br><span class="line">         4: invokevirtual #3                  // Method demo05/Sex.ordinal:()I</span><br><span class="line">         7: iaload</span><br><span class="line">         8: lookupswitch  &#123; // 2</span><br><span class="line">                       1: 36</span><br><span class="line">                       2: 44</span><br><span class="line">                 default: 52</span><br><span class="line">            &#125;</span><br><span class="line">        36: getstatic     #4                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">        39: ldc           #5                  // String nan</span><br><span class="line">        41: invokevirtual #6                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">        44: getstatic     #4                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">        47: ldc           #7                  // String 女</span><br><span class="line">        49: invokevirtual #6                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">        52: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">     ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0: getstatic     #2                  // Field demo05/Demo05_4$1.$SwitchMap$demo05$Sex:[I</span><br></pre></td></tr></table></figure>
+<p>这里可以看出,jvm帮我们生成了一个名叫Demo05_4$1的内部类</p>
+<p>其中有一个int类型的数组</p>
+<p>转换后这个内部类的代码如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo05_4</span>$1</span>&#123;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">int</span>[] map = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">2</span>]</span><br><span class="line">  <span class="keyword">static</span>&#123;</span><br><span class="line">    map[Sex.MALE.ordinal()] = <span class="number">1</span></span><br><span class="line">    map[Sex.FEMALE.ordinal()] = <span class="number">2</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后 利用一个byte类型的swatch进行操作.</p>
+<h1 id="枚举类"><a href="#枚举类" class="headerlink" title="枚举类"></a>枚举类</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">public enum Sex &#123;</span><br><span class="line">    MALE,FEMALE</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于字节码比较多,我们直接看转换后代码.代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">public final class Sex extends Enum&lt;Sex&gt;&#123;</span><br><span class="line"></span><br><span class="line">    public static final Sex MALE;</span><br><span class="line">    public static final Sex FEMALE;</span><br><span class="line">    private static final Sex[] $values;</span><br><span class="line">    static &#123;</span><br><span class="line">        MALE = new Sex(&quot;MALE&quot;,0);</span><br><span class="line">        FEMALE = new Sex(&quot;FEMALE&quot;,1);</span><br><span class="line">        $values = new Sex[]&#123;MALE, FEMALE&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    /**</span><br><span class="line">     * Sole constructor.  Programmers cannot invoke this constructor.</span><br><span class="line">     * It is for use by code emitted by the compiler in response to</span><br><span class="line">     * enum type declarations.</span><br><span class="line">     *</span><br><span class="line">     * @param name    - The name of this enum constant, which is the identifier</span><br><span class="line">     *                used to declare it.</span><br><span class="line">     * @param ordinal - The ordinal of this enumeration constant (its position</span><br><span class="line">     *                in the enum declaration, where the initial constant is assigned</span><br><span class="line">     */</span><br><span class="line">    private Sex(String name, int ordinal) &#123;</span><br><span class="line">        super(name, ordinal);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    public static Sex[] values() &#123;</span><br><span class="line">        return $values;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public static Sex valueOf(String name)&#123;</span><br><span class="line">        return Enum.valueOf(Sex.class,name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这就是枚举类的jvm实现.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JVM/" rel="tag"><i class="fa fa-tag"></i> JVM</a>
+          
+            <a href="/tags/语法糖/" rel="tag"><i class="fa fa-tag"></i> 语法糖</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/01/JAVA类加载阶段详解/" rel="next" title="JAVA类加载阶段详解">
+                <i class="fa fa-chevron-left"></i> JAVA类加载阶段详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header2.jpg"
+                alt="Wayne Cui" />
+            
+              <p class="site-author-name" itemprop="name">Wayne Cui</p>
+              <p class="site-description motion-element" itemprop="description">Java</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#编译期语法糖-二"><span class="nav-number">1.</span> <span class="nav-text">编译期语法糖(二)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#foreach循环"><span class="nav-number">1.1.</span> <span class="nav-text">foreach循环</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#switch语法糖"><span class="nav-number">2.</span> <span class="nav-text">switch语法糖</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#switch-String"><span class="nav-number">2.1.</span> <span class="nav-text">switch-String</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#switch-enum"><span class="nav-number">2.2.</span> <span class="nav-text">switch-enum</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#枚举类"><span class="nav-number">3.</span> <span class="nav-text">枚举类</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wayne Cui</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>

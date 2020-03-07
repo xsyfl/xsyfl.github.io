@@ -252,6 +252,226 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://cxzd.space/2020/03/07/编译期语法糖(二)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wayne Cui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wayne">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/07/编译期语法糖(二)/" itemprop="url">编译期语法糖(二)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-07T17:20:00+08:00">
+                2020-03-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,692
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  9
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="编译期语法糖-二"><a href="#编译期语法糖-二" class="headerlink" title="编译期语法糖(二)"></a>编译期语法糖(二)</h1><h2 id="foreach循环"><a href="#foreach循环" class="headerlink" title="foreach循环"></a>foreach循环</h2><p>在JDK5以后,开始引入的一种新的语法糖.支持数组和集合的遍历.</p>
+<p>我们先来看数组:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo05_1</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] arr = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>&#125;;<span class="comment">// 数组初始化的语法也是语法糖哦</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i : arr) &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们先通过javap命令反编译:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(java.lang.String[])</span></span>;</span><br><span class="line">    descriptor: ([Ljava/lang/String;)V</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=<span class="number">4</span>, locals=<span class="number">6</span>, args_size=<span class="number">1</span></span><br><span class="line">         <span class="number">0</span>: iconst_5                         </span><br><span class="line">         <span class="number">1</span>: newarray       <span class="keyword">int</span></span><br><span class="line">         <span class="number">3</span>: dup</span><br><span class="line">         <span class="number">4</span>: iconst_0</span><br><span class="line">         <span class="number">5</span>: iconst_1</span><br><span class="line">         <span class="number">6</span>: iastore</span><br><span class="line">         <span class="number">7</span>: dup</span><br><span class="line">         <span class="number">8</span>: iconst_1</span><br><span class="line">         <span class="number">9</span>: iconst_2</span><br><span class="line">        <span class="number">10</span>: iastore</span><br><span class="line">        <span class="number">11</span>: dup</span><br><span class="line">        <span class="number">12</span>: iconst_2</span><br><span class="line">        <span class="number">13</span>: iconst_3</span><br><span class="line">        <span class="number">14</span>: iastore</span><br><span class="line">        <span class="number">15</span>: dup</span><br><span class="line">        <span class="number">16</span>: iconst_3</span><br><span class="line">        <span class="number">17</span>: iconst_4</span><br><span class="line">        <span class="number">18</span>: iastore</span><br><span class="line">        <span class="number">19</span>: dup</span><br><span class="line">        <span class="number">20</span>: iconst_4</span><br><span class="line">        <span class="number">21</span>: iconst_5</span><br><span class="line">        <span class="number">22</span>: iastore</span><br><span class="line">        <span class="number">23</span>: astore_1</span><br><span class="line">        <span class="number">24</span>: aload_1</span><br><span class="line">        <span class="number">25</span>: astore_2</span><br><span class="line">        <span class="number">26</span>: aload_2</span><br><span class="line">        <span class="number">27</span>: arraylength</span><br><span class="line">        <span class="number">28</span>: istore_3</span><br><span class="line">        <span class="number">29</span>: iconst_0</span><br><span class="line">        <span class="number">30</span>: istore        <span class="number">4</span></span><br><span class="line">        <span class="number">32</span>: iload         <span class="number">4</span></span><br><span class="line">        <span class="number">34</span>: iload_3</span><br><span class="line">        <span class="number">35</span>: if_icmpge     <span class="number">58</span>              <span class="comment">// if_icmpge 指令的意思是如果一个值大于或等于另外一个</span></span><br><span class="line">        <span class="number">38</span>: aload_2</span><br><span class="line">        <span class="number">39</span>: iload         <span class="number">4</span></span><br><span class="line">        <span class="number">41</span>: iaload</span><br><span class="line">        <span class="number">42</span>: istore        <span class="number">5</span></span><br><span class="line">        44: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">        <span class="number">47</span>: iload         <span class="number">5</span></span><br><span class="line">        49: invokevirtual #3                  // Method java/io/PrintStream.println:(I)V</span><br><span class="line">        <span class="number">52</span>: iinc          <span class="number">4</span>, <span class="number">1</span></span><br><span class="line">        <span class="number">55</span>: goto          <span class="number">32</span></span><br><span class="line">        <span class="number">58</span>: <span class="keyword">return</span></span><br><span class="line">      LineNumberTable:</span><br><span class="line">        ...</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">       ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在指令的前 24条,就是新建数组队列的语法糖</p>
+<p>转换成对应的代码如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] arr = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">5</span>];</span><br><span class="line">       arr[<span class="number">0</span>] =<span class="number">1</span>;</span><br><span class="line">       arr[<span class="number">1</span>] =<span class="number">2</span>;</span><br><span class="line">       arr[<span class="number">2</span>] =<span class="number">3</span>;</span><br><span class="line">       arr[<span class="number">3</span>] =<span class="number">4</span>;</span><br><span class="line">       arr[<span class="number">4</span>] =<span class="number">5</span>;</span><br></pre></td></tr></table></figure>
+<p>然后我们再来分析后面的字节码,可以转换成对应的代码如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> length = arr.length;</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; length; i++) &#123;</span><br><span class="line">          System.out.println(arr[i]);</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出,foreach 也是编译成fori进行遍历</p>
+<hr>
+<p>集合进行foreach.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo05_2</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; list = Arrays.asList(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);</span><br><span class="line">        <span class="keyword">for</span> (Integer i : list) &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用javap进行反编译</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(java.lang.String[])</span></span>;</span><br><span class="line">    descriptor: ([Ljava/lang/String;)V</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=<span class="number">4</span>, locals=<span class="number">4</span>, args_size=<span class="number">1</span></span><br><span class="line">         <span class="number">0</span>: iconst_5</span><br><span class="line">         1: anewarray     #2                  // class java/lang/Integer</span><br><span class="line">         <span class="number">4</span>: dup</span><br><span class="line">         <span class="number">5</span>: iconst_0</span><br><span class="line">         <span class="number">6</span>: iconst_1</span><br><span class="line">         7: invokestatic  #3                  // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;</span><br><span class="line">        <span class="number">10</span>: aastore</span><br><span class="line">        <span class="number">11</span>: dup</span><br><span class="line">        <span class="number">12</span>: iconst_1</span><br><span class="line">        <span class="number">13</span>: iconst_2</span><br><span class="line">        14: invokestatic  #3                  // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;</span><br><span class="line">        <span class="number">17</span>: aastore</span><br><span class="line">        <span class="number">18</span>: dup</span><br><span class="line">        <span class="number">19</span>: iconst_2</span><br><span class="line">        <span class="number">20</span>: iconst_3</span><br><span class="line">        21: invokestatic  #3                  // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;</span><br><span class="line">        <span class="number">24</span>: aastore</span><br><span class="line">        <span class="number">25</span>: dup</span><br><span class="line">        <span class="number">26</span>: iconst_3</span><br><span class="line">        <span class="number">27</span>: iconst_4</span><br><span class="line">        28: invokestatic  #3                  // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;</span><br><span class="line">        <span class="number">31</span>: aastore</span><br><span class="line">        <span class="number">32</span>: dup</span><br><span class="line">        <span class="number">33</span>: iconst_4</span><br><span class="line">        <span class="number">34</span>: iconst_5</span><br><span class="line">        35: invokestatic  #3                  // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;</span><br><span class="line">        <span class="number">38</span>: aastore</span><br><span class="line">        39: invokestatic  #4                  // Method java/util/Arrays.asList:([Ljava/lang/Object;)Ljava/util/List;</span><br><span class="line">        <span class="number">42</span>: astore_1</span><br><span class="line">        <span class="number">43</span>: aload_1</span><br><span class="line">        44: invokeinterface #5,  1            // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;</span><br><span class="line">        <span class="number">49</span>: astore_2</span><br><span class="line">        <span class="number">50</span>: aload_2</span><br><span class="line">        51: invokeinterface #6,  1            // InterfaceMethod java/util/Iterator.hasNext:()Z</span><br><span class="line">        <span class="number">56</span>: ifeq          <span class="number">79</span></span><br><span class="line">        <span class="number">59</span>: aload_2</span><br><span class="line">        60: invokeinterface #7,  1            // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;</span><br><span class="line">        65: checkcast     #2                  // class java/lang/Integer</span><br><span class="line">        <span class="number">68</span>: astore_3</span><br><span class="line">        69: getstatic     #8                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">        <span class="number">72</span>: aload_3</span><br><span class="line">        73: invokevirtual #9                  // Method java/io/PrintStream.println:(Ljava/lang/Object;)V</span><br><span class="line">        <span class="number">76</span>: goto          <span class="number">50</span></span><br><span class="line">        <span class="number">79</span>: <span class="keyword">return</span></span><br><span class="line">      LineNumberTable:</span><br><span class="line">       ...</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">      ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 44: invokeinterface #5,  1            // InterfaceMethod java/util/List.iterator</p>
+<p>可以看出这里调用了list.iterator 方法</p>
+<p> 51: invokeinterface #6,  1            // InterfaceMethod java/util/Iterator.hasNext:()Z</p>
+<p>56: ifeq          79</p>
+<p>这里调用了iterator.hasNext()方法,且如果为false跳转到79行</p>
+<p> 60: invokeinterface #7,  1            // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;</p>
+<p> 65: checkcast     #2                  // class java/lang/Integer</p>
+<p>这里通过iterator.next()获取元素,且获取的元素类型为Object ,需要调用checkcat进行类型转换.</p>
+<p>所以,集合类的foreach方法语法糖可以翻译成如下代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">while(iterator.hasNext())&#123;</span><br><span class="line">          System.out.println(iterator.next());</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="switch语法糖"><a href="#switch语法糖" class="headerlink" title="switch语法糖"></a>switch语法糖</h1><h2 id="switch-String"><a href="#switch-String" class="headerlink" title="switch-String"></a>switch-String</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo05_3</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">choose</span><span class="params">(String str)</span></span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (str)&#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">"武松"</span>:</span><br><span class="line">                System.out.println(<span class="string">"打老虎"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">"鲁智深"</span>:</span><br><span class="line">                System.out.println(<span class="string">"倒拔垂杨柳!"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                System.out.println(<span class="string">"智取生辰纲"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后我们根据javap反编译</p>
+<p>我们直接翻译字节码,翻译后的代码如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">choose</span><span class="params">(String str)</span></span>&#123;</span><br><span class="line">        <span class="keyword">byte</span> i = -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">switch</span> (str.hashCode())&#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">878808</span>:</span><br><span class="line">                <span class="keyword">if</span>(str.equals(<span class="string">"武松"</span>))&#123;</span><br><span class="line">                    i= <span class="number">0</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">39343864</span>:</span><br><span class="line">                <span class="keyword">if</span>(str.equals(<span class="string">"鲁智深"</span>))&#123;</span><br><span class="line">                    i=<span class="number">2</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">switch</span> (i)&#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">                System.out.println(<span class="string">"打老虎"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">                System.out.println(<span class="string">"倒拔垂杨柳!"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                System.out.println(<span class="string">"智取生辰纲"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>可以,看出jvm将一个switch 拆分成两个switch来实现,然后再编译期,已经可以知道字符串的hashCode.</p>
+<p>但是因为可能出现两个字符串hashCode相同,但是不是同一个字符串的情况,所以再case中进行二次确认.</p>
+<p>为什么要在第一遍时比较hashCode,又要利用equals进行比较呢?</p>
+<p>这是因为利用hashCode可以提高比较效率,减少可能的比较;而equals比较是为了防止hashCode冲突.</p>
+<h2 id="switch-enum"><a href="#switch-enum" class="headerlink" title="switch-enum"></a>switch-enum</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo05_4</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printSex</span><span class="params">(Sex sex)</span></span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (sex)&#123;</span><br><span class="line">            <span class="keyword">case</span> MALE:</span><br><span class="line">                System.out.println(<span class="string">"男"</span>);</span><br><span class="line">            <span class="keyword">case</span> FEMALE:</span><br><span class="line">                System.out.println(<span class="string">"女"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">enum</span> Sex &#123;</span><br><span class="line">    MALE,FEMALE</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>反编译后</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">  public static void printSex(demo05.Sex);</span><br><span class="line">    descriptor: (Ldemo05/Sex;)V</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=2, locals=1, args_size=1</span><br><span class="line">         0: getstatic     #2                  // Field demo05/Demo05_4$1.$SwitchMap$demo05$Sex:[I</span><br><span class="line">         3: aload_0</span><br><span class="line">         4: invokevirtual #3                  // Method demo05/Sex.ordinal:()I</span><br><span class="line">         7: iaload</span><br><span class="line">         8: lookupswitch  &#123; // 2</span><br><span class="line">                       1: 36</span><br><span class="line">                       2: 44</span><br><span class="line">                 default: 52</span><br><span class="line">            &#125;</span><br><span class="line">        36: getstatic     #4                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">        39: ldc           #5                  // String nan</span><br><span class="line">        41: invokevirtual #6                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">        44: getstatic     #4                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">        47: ldc           #7                  // String 女</span><br><span class="line">        49: invokevirtual #6                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">        52: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">     ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0: getstatic     #2                  // Field demo05/Demo05_4$1.$SwitchMap$demo05$Sex:[I</span><br></pre></td></tr></table></figure>
+<p>这里可以看出,jvm帮我们生成了一个名叫Demo05_4$1的内部类</p>
+<p>其中有一个int类型的数组</p>
+<p>转换后这个内部类的代码如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo05_4</span>$1</span>&#123;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">int</span>[] map = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">2</span>]</span><br><span class="line">  <span class="keyword">static</span>&#123;</span><br><span class="line">    map[Sex.MALE.ordinal()] = <span class="number">1</span></span><br><span class="line">    map[Sex.FEMALE.ordinal()] = <span class="number">2</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后 利用一个byte类型的swatch进行操作.</p>
+<h1 id="枚举类"><a href="#枚举类" class="headerlink" title="枚举类"></a>枚举类</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">public enum Sex &#123;</span><br><span class="line">    MALE,FEMALE</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于字节码比较多,我们直接看转换后代码.代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">public final class Sex extends Enum&lt;Sex&gt;&#123;</span><br><span class="line"></span><br><span class="line">    public static final Sex MALE;</span><br><span class="line">    public static final Sex FEMALE;</span><br><span class="line">    private static final Sex[] $values;</span><br><span class="line">    static &#123;</span><br><span class="line">        MALE = new Sex(&quot;MALE&quot;,0);</span><br><span class="line">        FEMALE = new Sex(&quot;FEMALE&quot;,1);</span><br><span class="line">        $values = new Sex[]&#123;MALE, FEMALE&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    /**</span><br><span class="line">     * Sole constructor.  Programmers cannot invoke this constructor.</span><br><span class="line">     * It is for use by code emitted by the compiler in response to</span><br><span class="line">     * enum type declarations.</span><br><span class="line">     *</span><br><span class="line">     * @param name    - The name of this enum constant, which is the identifier</span><br><span class="line">     *                used to declare it.</span><br><span class="line">     * @param ordinal - The ordinal of this enumeration constant (its position</span><br><span class="line">     *                in the enum declaration, where the initial constant is assigned</span><br><span class="line">     */</span><br><span class="line">    private Sex(String name, int ordinal) &#123;</span><br><span class="line">        super(name, ordinal);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    public static Sex[] values() &#123;</span><br><span class="line">        return $values;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public static Sex valueOf(String name)&#123;</span><br><span class="line">        return Enum.valueOf(Sex.class,name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这就是枚举类的jvm实现.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://cxzd.space/2020/03/01/JAVA类加载阶段详解/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -469,6 +689,237 @@
 </ul>
 <hr>
 <p>以上仅为个人观点,如有错误,欢迎指正.谢谢!</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://cxzd.space/2020/03/01/编译期语法糖(一)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wayne Cui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wayne">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/01/编译期语法糖(一)/" itemprop="url">编译期语法糖(一)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-01T17:20:00+08:00">
+                2020-03-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,612
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="编译期语法糖-一"><a href="#编译期语法糖-一" class="headerlink" title="编译期语法糖(一)"></a>编译期语法糖(一)</h1><p>所谓的语法糖,就是指java编译器在把.java文件编译成.class字节码的过程中,自动生成和转换的一些代码.主要是为了减轻程序猿的负担.</p>
+<p>语法糖（Syntactic sugar），也译为糖衣语法，是由英国计算机科学家彼得·兰丁发明的一个术语，指计算机语言中添加的某种语法，这种语法对语言的功能没有影响，但是更方便程序员使用。语法糖让程序更加简洁，有更高的可读性。</p>
+<h2 id="默认构造器"><a href="#默认构造器" class="headerlink" title="默认构造器"></a>默认构造器</h2><p>我们先创建一个没有默认构造器的类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo04_1</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用javap命令反编译,得到如下字节码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  public demo04.Demo04_1();</span><br><span class="line">    descriptor: ()V</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=1, locals=1, args_size=1</span><br><span class="line">         0: aload_0</span><br><span class="line">         1: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">         4: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 3: 0</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0       5     0  this   Ldemo04/Demo04_1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出,编译期自动生成了一个无参的构造器,引用了父类,也就是Object的init 方法.</p>
+<p>就相当于下面代码:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo04_1</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Demo04_1</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>();       </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="自动拆装箱"><a href="#自动拆装箱" class="headerlink" title="自动拆装箱"></a>自动拆装箱</h2><p>在Java SE5中，为了减少开发人员的工作，Java提供了自动拆箱与自动装箱功能。</p>
+<p>自动装箱: 就是将基本数据类型自动转换成对应的包装类。</p>
+<p>自动拆箱：就是将包装类自动转换成对应的基本数据类型。</p>
+<p>例如下面代码:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo04_2</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Integer x = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> y = x;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们同样适用javap反编译,然后查看main方法中的code</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public static void main(java.lang.String[]);</span><br><span class="line">   descriptor: ([Ljava/lang/String;)V</span><br><span class="line">   flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">   Code:</span><br><span class="line">     stack=1, locals=3, args_size=1</span><br><span class="line">        0: iconst_1</span><br><span class="line">        1: invokestatic  #2                  // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;</span><br><span class="line">        4: astore_1</span><br><span class="line">        5: aload_1</span><br><span class="line">        6: invokevirtual #3                  // Method java/lang/Integer.intValue:()I</span><br><span class="line">        9: istore_2</span><br><span class="line">       10: return</span><br><span class="line">     LineNumberTable:</span><br><span class="line">      ...</span><br><span class="line">     LocalVariableTable:</span><br><span class="line">      ...</span><br></pre></td></tr></table></figure>
+<p>1: invokestatic  #2                  // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;</p>
+<p>查看字节码,可以看出是同步Integer.valueOf()进行装箱</p>
+<p> 6: invokevirtual #3                  // Method java/lang/Integer.intValue:()I</p>
+<p>通过Integer.inValue()进行拆箱</p>
+<hr>
+<p>将字节码转换为java代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class Demo04_2 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Integer x = Integer.valueOf(1); </span><br><span class="line">        int y = x.intValue();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="泛型擦除"><a href="#泛型擦除" class="headerlink" title="泛型擦除"></a>泛型擦除</h2><p>在Java字节码中是没有泛型这一概念,  只有普通方法和普通类, 所有泛型类的泛型参数都会在编译时期被擦除, 所以泛型类并没有自己独有的Class类对象比如List<integer>.class, 而只有List.class对象。</integer></p>
+<p>我们先来看一段代码:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo04_3</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        list.add(<span class="number">10</span>);</span><br><span class="line">        Integer a = list.get(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同样进行反编译,然后查看main方法的字节码:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Code:</span><br><span class="line">     stack=<span class="number">2</span>, locals=<span class="number">3</span>, args_size=<span class="number">1</span></span><br><span class="line">        0: new           #2                  // class java/util/ArrayList</span><br><span class="line">        <span class="number">3</span>: dup</span><br><span class="line">        4: invokespecial #3                  // Method java/util/ArrayList."&lt;init&gt;":()V</span><br><span class="line">        <span class="number">7</span>: astore_1</span><br><span class="line">        <span class="number">8</span>: aload_1</span><br><span class="line">        <span class="number">9</span>: bipush        <span class="number">10</span></span><br><span class="line">       11: invokestatic  #4                  // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;</span><br><span class="line">       14: invokeinterface #5,  2            // InterfaceMethod java/util/List.add:(Ljava/lang/Object;)Z</span><br><span class="line">       <span class="number">19</span>: pop</span><br><span class="line">       <span class="number">20</span>: aload_1</span><br><span class="line">       <span class="number">21</span>: iconst_0</span><br><span class="line">       22: invokeinterface #6,  2            // InterfaceMethod java/util/List.get:(I)Ljava/lang/Object;</span><br><span class="line">       27: checkcast     #7                  // class java/lang/Integer</span><br><span class="line">       <span class="number">30</span>: astore_2</span><br><span class="line">       <span class="number">31</span>: <span class="keyword">return</span></span><br></pre></td></tr></table></figure>
+<p>22: invokeinterface #6,  2            // InterfaceMethod java/util/List.get:(I)Ljava/lang/Object;</p>
+<p>27: checkcast     #7                  // class java/lang/Integer</p>
+<p>通过这两行可以看出,调用list.get()返回结果为Object.</p>
+<p>然后通过类型转换指令 checkcast 转换成Integer对象.</p>
+<p>相当于:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Integer a = (Integer) list.get(0);</span><br></pre></td></tr></table></figure>
+<hr>
+<p>虽然在编译期泛型在code代码中擦除,但是我们却可以在字节码的其他地方获得这些信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">LocalVariableTypeTable:</span><br><span class="line">     Start  Length  Slot  Name   Signature</span><br><span class="line">         8      24     1  list   Ljava/util/List&lt;Ljava/lang/Integer;&gt;;</span><br></pre></td></tr></table></figure>
+<p>这就是一个泛型信息表,表示槽位1中的list的泛型为Ljava/lang/Integer.</p>
+<hr>
+<p>泛型擦除可能引起的问题</p>
+<p>我们来看下面一段代码:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo04_3</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Map&lt;String, Object&gt; map = <span class="keyword">new</span> HashMap&lt;String, Object&gt;();</span><br><span class="line">        List&lt;Integer&gt; list1 = Arrays.asList(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>);</span><br><span class="line">        map.put(<span class="string">"list"</span>,list1);</span><br><span class="line">        </span><br><span class="line">        List&lt;String&gt; list2 = (List&lt;String&gt;)map.get(<span class="string">"list"</span>);</span><br><span class="line">        <span class="keyword">for</span>(String str : list2)&#123;</span><br><span class="line">            System.out.println(str);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这是,在编译期是不报错的,好想是正确执行下面的类型转换</p>
+<pre><code>List&lt;String&gt; list2 = (List&lt;String&gt;)map.get(&quot;list&quot;);
+</code></pre><p>但是在运行时,却会报出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java.lang.ClassCastException: java.lang.Integer cannot be cast to java.lang.String</span><br></pre></td></tr></table></figure>
+<p>这是由于,在编译期,进行了泛型擦除,而再get后进行类型转换时,jvm也没有(List<string>)的概念,也当成是List类型来转换,所以转换时成功的,但是在list中,其实还是Integer类型的元素.所以当成字符串来遍历时,自然会报错.</string></p>
+<h2 id="可变参数"><a href="#可变参数" class="headerlink" title="可变参数"></a>可变参数</h2><p>先看下面一段代码:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo04_4</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">foo</span><span class="params">(String... args)</span></span>&#123;</span><br><span class="line">        String[] arr = args;</span><br><span class="line">        System.out.println(arr);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        foo(<span class="string">"Hello"</span>,<span class="string">"World"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过Javap反编译</p>
+<p>我们先看foo方法的字节码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public static void foo(java.lang.String...);</span><br><span class="line">  descriptor: ([Ljava/lang/String;)V</span><br><span class="line">  flags: ACC_PUBLIC, ACC_STATIC, ACC_VARARGS</span><br><span class="line">  Code:</span><br><span class="line">    stack=2, locals=2, args_size=1</span><br><span class="line">       0: aload_0</span><br><span class="line">       1: astore_1</span><br><span class="line">       2: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">       5: aload_1</span><br><span class="line">       6: invokevirtual #3                  // Method java/io/PrintStream.println:(Ljava/lang/Object;)V</span><br><span class="line">       9: return</span><br><span class="line">    LineNumberTable:</span><br><span class="line">      line 5: 0</span><br><span class="line">      line 6: 2</span><br><span class="line">      line 7: 9</span><br><span class="line">    LocalVariableTable:</span><br><span class="line">      Start  Length  Slot  Name   Signature</span><br><span class="line">          0      10     0  args   [Ljava/lang/String;</span><br><span class="line">          2       8     1   arr   [Ljava/lang/String;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><figcaption><span>([Ljava/lang/String;)V```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">从参数描述中,可以看出 入参是一个String[]</span><br><span class="line"></span><br><span class="line">         0: aload_0</span><br><span class="line">         1: astore_1</span><br><span class="line">从这也可以看出,转换成String[] arr时,没有进行类型转换,进一步证明了可变参数,其实就是数组</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">然后我们在看main方法的字节码:</span><br></pre></td></tr></table></figure>
+<p> public static void main(java.lang.String[]);<br>    descriptor: ([Ljava/lang/String;)V<br>    flags: ACC_PUBLIC, ACC_STATIC<br>    Code:<br>      stack=4, locals=1, args_size=1<br>         0: iconst_2<br>         1: anewarray     #4                  // class java/lang/String<br>         4: dup<br>         5: iconst_0<br>         6: ldc           #5                  // String Hello<br>         8: aastore<br>         9: dup<br>        10: iconst_1<br>        11: ldc           #6                  // String World<br>        13: aastore<br>        14: invokestatic  #7                  // Method foo:([Ljava/lang/String;)V<br>        17: return</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">```java</span><br><span class="line">1: anewarray     #4                  // class java/lang/String</span><br></pre></td></tr></table></figure>
+<p>可以看出是新new了一个数组,当做可变参数传给了foo</p>
+<p>也就是,编译器将上述代码转换为</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo04_4</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">foo</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        String[] arr = args;</span><br><span class="line">        System.out.println(arr);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        foo(<span class="keyword">new</span> String[]&#123;<span class="string">"Hello"</span>,<span class="string">"World"</span>&#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意: 如果调用<strong>foo()</strong> ,则等价代码为 <strong>foo(new String[]{});</strong> ,创建了一个空数组,而不会传递Null过去.</p>
 
           
         
@@ -2154,7 +2605,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2176,7 +2627,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
