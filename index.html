@@ -252,6 +252,474 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://cxzd.space/2020/03/01/JAVA类加载阶段详解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wayne Cui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wayne">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/01/JAVA类加载阶段详解/" itemprop="url">JAVA类加载阶段详解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-01T17:30:00+08:00">
+                2020-03-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,165
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  10
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="JAVA类加载阶段详解"><a href="#JAVA类加载阶段详解" class="headerlink" title="JAVA类加载阶段详解"></a>JAVA类加载阶段详解</h1><p>首先我们先来看一道面试题</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo03_5</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(E.a);</span><br><span class="line">        System.out.println(E.b);</span><br><span class="line">        System.out.println(E.c);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">E</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String b = <span class="string">"20"</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Integer c = <span class="number">30</span>;</span><br><span class="line">    <span class="keyword">static</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"E init!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>问最后输出什么?</p>
+<hr>
+<p>从大的阶段来说,类加载一共分为3个阶段,分别为<strong>加载</strong>,<strong>链接</strong>,<strong>初始化</strong> .</p>
+<h2 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h2><p>在类被编译成class文件后,需要通过类加载器,加载带方法区中.内部采用的是C++的instanceKlass描述java类,它的重要属性有:</p>
+<ul>
+<li>_java_mirror 即java的镜像类,例如对String来说,就是String.class,作用是把Klass暴露给java使用</li>
+<li>_super 即父类</li>
+<li>_fields 即成员变量</li>
+<li>_methods 即方法</li>
+<li>_constants 即常量池</li>
+<li>_class_loader 即类加载器</li>
+<li>_vtable 虚方法表</li>
+<li>_itable 接口方法表</li>
+</ul>
+<p>如果这个类的父类还没有被加载,先加载父类.</p>
+<p>加载和链接是可能交替运行的.</p>
+<h1 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h1><p>链接又分为三个小阶段,分别为<strong>验证</strong>,<strong>准备</strong>,<strong>解析</strong>.</p>
+<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><p>验证:验证类是否符合JVM规范,进行安全性检查.</p>
+<p>这里我们使用Sublime等支持二进制的编辑器修改class的魔术,将cafe babe改成cafe baby,然后再控制台运行java类.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">java.lang.ClassFormatError: Incompatible magic value <span class="number">1667327589</span> in <span class="class"><span class="keyword">class</span> <span class="title">file</span> <span class="title">Demo03_1</span></span></span><br><span class="line"><span class="class">        <span class="title">at</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">ClassLoader</span>.<span class="title">defineClass1</span>(<span class="title">Native</span> <span class="title">Method</span>)</span></span><br><span class="line">        at java.lang.ClassLoader.defineClass(ClassLoader.java:763)</span><br><span class="line">        at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:<span class="number">142</span>)</span><br><span class="line">        at java.net.URLClassLoader.defineClass(URLClassLoader.java:<span class="number">467</span>)</span><br><span class="line">        at java.net.URLClassLoader.access$<span class="number">100</span>(URLClassLoader.java:<span class="number">73</span>)</span><br><span class="line">        at java.net.URLClassLoader$<span class="number">1</span>.run(URLClassLoader.java:<span class="number">368</span>)</span><br><span class="line">        at java.net.URLClassLoader$<span class="number">1</span>.run(URLClassLoader.java:<span class="number">362</span>)</span><br><span class="line">        at java.security.AccessController.doPrivileged(Native Method)</span><br><span class="line">        at java.net.URLClassLoader.findClass(URLClassLoader.java:<span class="number">361</span>)</span><br><span class="line">        at java.lang.ClassLoader.loadClass(ClassLoader.java:<span class="number">424</span>)</span><br><span class="line">        at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:<span class="number">331</span>)</span><br><span class="line">        at java.lang.ClassLoader.loadClass(ClassLoader.java:<span class="number">357</span>)</span><br><span class="line">        at sun.launcher.LauncherHelper.checkAndLoadMain(LauncherHelper.java:<span class="number">495</span>)</span><br><span class="line">Error: A JNI error has occurred, please check your installation and <span class="keyword">try</span> again</span><br><span class="line">Exception in thread <span class="string">"main"</span></span><br></pre></td></tr></table></figure>
+<p>可以看出,抛出了一个ClassFormatError,这是由于类的格式错误所导致,这就是在验证阶段所做的事情.</p>
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>准备:为static变量分配空间,设置默认值</p>
+<ul>
+<li>static变量在JDK7之前存储于instanceKlass末尾,从JDK7开始,存储于_java_mirror末尾</li>
+<li>static变量分配空间和赋值是两个步骤,分配空间在准备阶段完成,赋值是在初始化阶段完成</li>
+<li>如果static变量是final类型的基本类型或字符串常量,那么编译阶段值就确定了,赋值在准备阶段完成</li>
+<li>如果static变量是fianl类型的,但属于引用类型,那么赋值在初始化阶段完成</li>
+</ul>
+<hr>
+<p>通过下面的例子,我们来确定static变量分配空间和赋值是两个步骤</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class Demo03_2 &#123;</span><br><span class="line">    static int a;</span><br><span class="line">    static int b = 10;</span><br><span class="line">    static final int c = 20;</span><br><span class="line">    static final String d = &quot;30&quot;;</span><br><span class="line">    static final String e = new String(&quot;40&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后使用javap反编译</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">int</span> a;</span><br><span class="line">    descriptor: I</span><br><span class="line">    flags: ACC_STATIC</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">int</span> b;</span><br><span class="line">    descriptor: I</span><br><span class="line">    flags: ACC_STATIC</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> c;</span><br><span class="line">    descriptor: I</span><br><span class="line">    flags: ACC_STATIC, ACC_FINAL</span><br><span class="line">    ConstantValue: <span class="keyword">int</span> <span class="number">20</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">final</span> java.lang.String d;</span><br><span class="line">    descriptor: Ljava/lang/String;</span><br><span class="line">    flags: ACC_STATIC, ACC_FINAL</span><br><span class="line">    ConstantValue: String <span class="number">30</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">final</span> java.lang.String e;</span><br><span class="line">    descriptor: Ljava/lang/String;</span><br><span class="line">    flags: ACC_STATIC, ACC_FINAL</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> demo03.Demo03_2();</span><br><span class="line">    descriptor: ()V</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=<span class="number">1</span>, locals=<span class="number">1</span>, args_size=<span class="number">1</span></span><br><span class="line">         <span class="number">0</span>: aload_0</span><br><span class="line">         1: invokespecial #1                  // Method java/lang/Object."&lt;init&gt;":()V</span><br><span class="line">         <span class="number">4</span>: <span class="keyword">return</span></span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line <span class="number">3</span>: <span class="number">0</span></span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            <span class="number">0</span>       <span class="number">5</span>     <span class="number">0</span>  <span class="keyword">this</span>   Ldemo03/Demo03_2;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> &#123;&#125;;</span><br><span class="line">    descriptor: ()V</span><br><span class="line">    flags: ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=<span class="number">3</span>, locals=<span class="number">0</span>, args_size=<span class="number">0</span></span><br><span class="line">         <span class="number">0</span>: bipush        <span class="number">10</span>                  <span class="comment">//准备个常量10</span></span><br><span class="line">         2: putstatic     #2                  // Field b:I  赋值给b</span><br><span class="line">         5: new           #3                  // class java/lang/String</span><br><span class="line">         <span class="number">8</span>: dup</span><br><span class="line">         9: ldc           #4                  // String 40</span><br><span class="line">        11: invokespecial #5                  // Method java/lang/String."&lt;init&gt;":(Ljava/lang/String;)V</span><br><span class="line">        14: putstatic     #6                  // Field e:Ljava/lang/String;</span><br><span class="line">        <span class="number">17</span>: <span class="keyword">return</span></span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line <span class="number">5</span>: <span class="number">0</span></span><br><span class="line">        line <span class="number">8</span>: <span class="number">5</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先,我们先了解下,在初始化话过程,会执行static{}方法,也就是<cinit>方法.</cinit></p>
+<p><strong>static int a;</strong></p>
+<p>通过字节码我们可以看出,只有对a的声明,并没有对a进行赋值.</p>
+<p>因为我们只设定a为默认值,所以没有在<cinit>方法中进行赋值.</cinit></p>
+<p><strong>static int b = 10;</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span>: bipush        <span class="number">10</span>                  <span class="comment">//准备个常量10</span></span><br><span class="line">2: putstatic     #2                  // Field b:I  赋值给b</span><br></pre></td></tr></table></figure>
+<p>我们可以看出是在<cinit>方法中对b进行赋值</cinit></p>
+<p><strong>static final int c = 20; </strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">static final int c;</span><br><span class="line">descriptor: I</span><br><span class="line">flags: ACC_STATIC, ACC_FINAL</span><br><span class="line">ConstantValue: int 20</span><br></pre></td></tr></table></figure>
+<p>我们可以看出,没有进入<cinit>方法,就已经对c进行了赋值.</cinit></p>
+<p>也就是没有执行初始化方法,所以final类型的基本类型是在准备阶段赋值.</p>
+<p> <strong>static final String d = “30”;</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">static final java.lang.String d;</span><br><span class="line">   descriptor: Ljava/lang/String;</span><br><span class="line">   flags: ACC_STATIC, ACC_FINAL</span><br><span class="line">   ConstantValue: String 30</span><br></pre></td></tr></table></figure>
+<p>我们可以看出,final类型的字符串常量也是在准备阶段赋值</p>
+<p><strong>static final String e = new String(“40”);</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">5: new           #3                  // class java/lang/String</span><br><span class="line">         8: dup</span><br><span class="line">         9: ldc           #4                  // String 40</span><br><span class="line">        11: invokespecial #5                  // Method java/lang/String.&quot;&lt;init&gt;&quot;:(Ljava/lang/String;)V</span><br><span class="line">        14: putstatic     #6                  // Field e:Ljava/lang/String;</span><br></pre></td></tr></table></figure>
+<p>我们可以看出final类型的引用类型,是在初始化阶段赋值.</p>
+<hr>
+<h2 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h2><p>解析:将常量池中的符号引用解析为直接引用</p>
+<p>这里我们可以通过Classloader.loadClass方法,不会触发解析和初始化的特性.来通过HSDB工具.</p>
+<p>来查看,在未触发解析是,常量池中的引用对象,只是一个符号,并不知道具体的类的地址.只有在解析过后,才会把符号变为直接引用.</p>
+<p>由于篇幅的原因,这里就不演示了.</p>
+<h1 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h1><p>初始化:初始化即调用类的<cinit>()v方法,改方法是在编译期生成,虚拟机会保证这个类的<cinit>方法线程安全.</cinit></cinit></p>
+<h2 id="初始化发生的时机"><a href="#初始化发生的时机" class="headerlink" title="初始化发生的时机"></a>初始化发生的时机</h2><p>发生初始化的情况:</p>
+<ul>
+<li>main方法所在的类,总是会被首先初始化</li>
+<li>首次访问该类的静态变量或者静态方法时</li>
+<li>子类初始化,如果父类还没有初始化,会引发父类的初始化</li>
+<li>子类访问父类的静态变量,只触发父类的初始化</li>
+<li>Class.forName</li>
+<li>new 会导致初始化</li>
+</ul>
+<p>不会导致类初始化的情况</p>
+<ul>
+<li>访问类的static final静态常量(基本类型和字符串常量)不会触发初始化</li>
+<li>类对象.class不会触发初始化</li>
+<li>新建数组对象不会触发初始化</li>
+<li>类加载器的loadClass方法</li>
+<li>Class.forName 的参数2 为false</li>
+</ul>
+<hr>
+<p>案例:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo03_4</span> </span>&#123;</span><br><span class="line"><span class="comment">//    static&#123;</span></span><br><span class="line"><span class="comment">//        // main方法所在的代码块总是先执行初始化</span></span><br><span class="line"><span class="comment">//        System.out.println("main init");</span></span><br><span class="line"><span class="comment">//    &#125;</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ClassNotFoundException </span>&#123;</span><br><span class="line"><span class="comment">//        //final类型静态常量不会触发初始化</span></span><br><span class="line"><span class="comment">//        System.out.println(B.b);</span></span><br><span class="line"><span class="comment">//        // 访问类的class对象不会触发初始化,因为在java阶段就已经生成_java_mirror,也就是class对象</span></span><br><span class="line"><span class="comment">//        System.out.println(B.class);</span></span><br><span class="line"><span class="comment">//        //创建类的数组不会导致初始化</span></span><br><span class="line"><span class="comment">//        B[] arr =new B[5];</span></span><br><span class="line"><span class="comment">//        //类加载器的loadClass方法</span></span><br><span class="line"><span class="comment">//        ClassLoader c1 = Thread.currentThread().getContextClassLoader();</span></span><br><span class="line"><span class="comment">//        c1.loadClass("demo03.B");</span></span><br><span class="line"><span class="comment">//        //Class.forName 的参数2 为false</span></span><br><span class="line"><span class="comment">//        ClassLoader c2 = Thread.currentThread().getContextClassLoader();</span></span><br><span class="line"><span class="comment">//        Class.forName("demo03.B",false,c2);</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 会触发类初始化的情况</span></span><br><span class="line"><span class="comment">//        //首次访问这个类的静态变量或者静态方法时</span></span><br><span class="line"><span class="comment">//        System.out.println(A.a);</span></span><br><span class="line"><span class="comment">//        // 子类初始化,会先触发父类初始化,父类初始化在子类初始化之前</span></span><br><span class="line"><span class="comment">//        System.out.println(B.c);</span></span><br><span class="line"><span class="comment">//        //子类调用父类的静态变量,只触发父类的初始化</span></span><br><span class="line"><span class="comment">//        System.out.println(B.a);</span></span><br><span class="line"><span class="comment">//        //Class.forName</span></span><br><span class="line"><span class="comment">//        ClassLoader c2 = Thread.currentThread().getContextClassLoader();</span></span><br><span class="line"><span class="comment">//        Class.forName("demo03.B");</span></span><br><span class="line"><span class="comment">//        //new 方法</span></span><br><span class="line"><span class="comment">//        new A();</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">static</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"a init"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">double</span> b = <span class="number">5.0</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">boolean</span> c = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">"b.init"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>现在,我们再回过头来看开始的那道面试题</p>
+<p>很明显输出为:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">10</span><br><span class="line">20</span><br><span class="line">E init!</span><br><span class="line">30</span><br></pre></td></tr></table></figure>
+<hr>
+<p>最后,我们再学习一个类加载的应用</p>
+<h2 id="利用类加载机制写一个单例类"><a href="#利用类加载机制写一个单例类" class="headerlink" title="利用类加载机制写一个单例类"></a>利用类加载机制写一个单例类</h2><p>话不多说,直接上代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public class Singleton &#123;</span><br><span class="line">    private Singleton()&#123;&#125;</span><br><span class="line"></span><br><span class="line">    //私有内部类来保存单例</span><br><span class="line">    private static class LazyHolder&#123;</span><br><span class="line">        static final Singleton INSTANCE = new Singleton();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    //第一次调用getInstance的时候,才会导致内部类的加载和初始化</span><br><span class="line">    //而jvm会保证类的初始化为线程安全的. 所以只会创建一个Singleton实例</span><br><span class="line">    public static Singleton getInstance()&#123;</span><br><span class="line">        return LazyHolder.INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上的实现特点是:</p>
+<ul>
+<li>懒惰实例化</li>
+<li>初始化的时候线程安全是有保障的</li>
+</ul>
+<hr>
+<p>以上仅为个人观点,如有错误,欢迎指正.谢谢!</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://cxzd.space/2020/02/25/通过字节码分析fanally面试题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wayne Cui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wayne">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/25/通过字节码分析fanally面试题/" itemprop="url">通过字节码分析fanally面试题</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-25T22:20:00+08:00">
+                2020-02-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,398
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  6
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="通过字节码分析finally面试题"><a href="#通过字节码分析finally面试题" class="headerlink" title="通过字节码分析finally面试题"></a>通过字节码分析finally面试题</h1><p>首先我们先来看两道面试题</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo2_2</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(test());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">10</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">20</span>;</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">30</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public class Demo2_3 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        System.out.println(test());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static int test()&#123;</span><br><span class="line">        int i ;</span><br><span class="line">        try &#123;</span><br><span class="line">            i = 10;</span><br><span class="line">            return i;</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">//            e.printStackTrace();</span><br><span class="line">            i = 20;</span><br><span class="line">            return i;</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line">            i =30;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>问两道题分别输出什么?为什么?</p>
+<hr>
+<p>我们分开来看,先看第一道题</p>
+<p>利用javap -v 指令生成字节码, 为了方便观看,我们只留test方法.</p>
+<p> 这里相比之前的字节码多了一个Exception table, 是用来实现异常处理.</p>
+<p>我们来逐行分析字节码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">test</span><span class="params">()</span></span>;</span><br><span class="line">    descriptor: ()I</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=<span class="number">1</span>, locals=<span class="number">3</span>, args_size=<span class="number">0</span>   <span class="comment">// 栈帧深度为1   局部变量表长度为3  因为是static 所以没有this引用,也没有行参,所以行参数量为0</span></span><br><span class="line">         <span class="number">0</span>: bipush        <span class="number">10</span>           <span class="comment">// 准备一个为10的常量,放入栈中       ------------------</span></span><br><span class="line">         <span class="number">2</span>: istore_0                   <span class="comment">// 将10放入局部变量表1的槽位中             try部分代码 |</span></span><br><span class="line">         <span class="number">3</span>: bipush        <span class="number">30</span>           <span class="comment">// 准备一个为30的常量,放入栈中               ---------</span></span><br><span class="line">         <span class="number">5</span>: ireturn                    <span class="comment">// ireturn 代表返回一个int类型的数据,也就是栈顶的30 </span></span><br><span class="line">         <span class="number">6</span>: astore_0                   <span class="comment">// 将Exception对象放入局部变量表    -------------------</span></span><br><span class="line">         <span class="number">7</span>: bipush        <span class="number">20</span>           <span class="comment">// 准备一个20的常量放入栈中              cache部分     |</span></span><br><span class="line">         <span class="number">9</span>: istore_1                   <span class="comment">// 将栈顶的20放入局部变量表                       代码 |</span></span><br><span class="line">        <span class="number">10</span>: bipush        <span class="number">30</span>           <span class="comment">// 准备一个30的常量放入栈中         -------------------  </span></span><br><span class="line">        <span class="number">12</span>: ireturn                    <span class="comment">// 返回栈顶的30                  -</span></span><br><span class="line">        <span class="number">13</span>: astore_2                   <span class="comment">// 将异常类型放入局部变量表        ---------------------</span></span><br><span class="line">        <span class="number">14</span>: bipush        <span class="number">30</span>           <span class="comment">// 准备一个30的常量放入栈中             finally部分     |</span></span><br><span class="line">        <span class="number">16</span>: ireturn                    <span class="comment">//  返回栈顶的30                  ---------------------</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">        * 异常表,用来实现异常功能. </span></span><br><span class="line"><span class="comment">        * from 代表 监听其实代码.(包含)</span></span><br><span class="line"><span class="comment">        * to   代表监听终止代码.(不包含)</span></span><br><span class="line"><span class="comment">        * target 代表如果出现异常,则跳转到字节码序号</span></span><br><span class="line"><span class="comment">        * type  代表监听类型</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">      Exception table:</span><br><span class="line">         from    to  target type</span><br><span class="line">             <span class="number">0</span>     <span class="number">3</span>     <span class="number">6</span>   Class java/lang/Exception  <span class="comment">//监听0-3,如果出现Exception类型的异常,则跳转到6</span></span><br><span class="line">             <span class="number">0</span>     <span class="number">3</span>    <span class="number">13</span>   any    <span class="comment">//监听0-3,如果出现非Exception类型的异常,如error,则跳转到13</span></span><br><span class="line">             <span class="number">6</span>    <span class="number">10</span>    <span class="number">13</span>   any    <span class="comment">//监听6-10,也就是cache代码块,如果出现任意异常,则跳转到13</span></span><br><span class="line">      LineNumberTable:</span><br><span class="line">       .....</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            <span class="number">7</span>       <span class="number">6</span>     <span class="number">0</span>     e   Ljava/lang/Exception;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里,我们可以看到:</p>
+<ol>
+<li>无论是try代码块,还是cache代码块,在编译期,都会在其后面追加上finally代码块的代码,以保障finall一定执行,因为一个方法只能有一个return,所以前面的return在编译期被优化了.</li>
+<li>为了保证finally代码块无论什么情况都要执行,所以利用了异常表,来保障,即使在try中发生了未cache的异常,或者在cache中发生异常,finally代码块都会执行.</li>
+<li>finally代码块,如果有retrun的话,发生异常可能被忽略,没有throw出去.这个例子中,如果cache中发生异常,或者try中发生为捕获的异常,但是却没有throw出去.所以,<strong>尽量不要在finally中写return.</strong></li>
+<li>在编译期,显示局部变量表长度为3,但是反编译结果却只有1个.这可能是由于后面两个变量无法确定名称导致.</li>
+</ol>
+<p>现在,我们知道了第一道题的答案:输出结果为30.</p>
+<hr>
+<p>然后我们再看第二道题</p>
+<p>还是先用javap -v 来反编译</p>
+<p>同样我们值保留test()方法</p>
+<p>然后来逐行分析</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">  public static int test();</span><br><span class="line">    descriptor: ()I</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=1, locals=4, args_size=0  // 栈深度为1 局部变量表长度为4  行参数为0</span><br><span class="line">         0: bipush        10          //准备一个常量10             ------------------------------</span><br><span class="line">         2: istore_0                  //放入局部变量表_0                   try代码              |</span><br><span class="line">         3: iload_0                   //从局部变量表_0去除10                                    |</span><br><span class="line">         4: istore_1                  //放入局部变量表_1   这是局部变量表_1和_2的数值都是10  -----</span><br><span class="line">         5: bipush        30          // 准备一个常量30</span><br><span class="line">         7: istore_0                  // 放入局部变量表_0 </span><br><span class="line">         8: iload_1                   // 将局部变量表_1放入栈顶</span><br><span class="line">         9: ireturn                   // 返回栈顶的元素</span><br><span class="line">        10: astore_1                  // 将Exception放入局部变量_1   --------------------------</span><br><span class="line">        11: bipush        20          // 准备20                          cache代码            |</span><br><span class="line">        13: istore_0                  // 将20放入局部变量表_0                                  |</span><br><span class="line">        14: iload_0                   // 加载局部变量表_0                                      |</span><br><span class="line">        15: istore_2                  // 放入局部变量表_2  这时局部变量表_0和_2的数值都是20   ----</span><br><span class="line">        16: bipush        30          // 准备30</span><br><span class="line">        18: istore_0                  // 放入局部变量表_0  此时局部变量表0为30 2为20</span><br><span class="line">        19: iload_2                   // 载入局部变量表_2  也就是数值20</span><br><span class="line">        20: ireturn                   // 返回栈顶数据</span><br><span class="line">        21: astore_3                  // 将异常放入局部变量表_3</span><br><span class="line">        22: bipush        30          // 准备30</span><br><span class="line">        24: istore_0                  // 放入局部变量表_0</span><br><span class="line">        25: aload_3                   // 去除局部变量表_3的异常</span><br><span class="line">        26: athrow                    // throw异常</span><br><span class="line">      Exception table:</span><br><span class="line">        ........</span><br><span class="line">      LineNumberTable:</span><br><span class="line">		...</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            3       7     0     i   I</span><br><span class="line">           11      10     1     e   Ljava/lang/Exception;</span><br><span class="line">           14       7     0     i   I</span><br><span class="line">           25       2     0     i   I</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里,我们可以看出:</p>
+<ol>
+<li>在finally中修改return的属性时,我们会先复制一份放入局部变量表,然后修改原有数据,将复制的数据return</li>
+<li>如果finally中没有retrurn,则出现异常时,finally中会主动throw掉.</li>
+</ol>
+<hr>
+<p>以上仅为个人观点,如有错误,欢迎指正.谢谢!</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://cxzd.space/2020/02/23/从面试题i++和++i来看java字节码/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1686,7 +2154,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1708,7 +2176,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
