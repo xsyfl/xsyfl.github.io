@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="算法,数据结构," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="字典树的实现和应用1.概述1.1 基础概念字典树,又称为单词查找树,Tire树,它是一种树形结构,它是一种hash树的变种.  1.2 基本性质 根节点不包含字符,除根节点外的每一个节点包含一个字符 从根节点到某一个节点,路上结果的字符链接起来,就是该节点对应的字符串. 每个节点对应的字符串都不相同  1.3 应用场景典型应用场景是用于统计,排序和保存大量的字符串(不仅限于字符串),经常被搜索引擎">
+<meta name="keywords" content="算法,数据结构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="字典树的实现和应用">
+<meta property="og:url" content="http://cxzd.space/2020/02/25/字典树的实现和应用/index.html">
+<meta property="og:site_name" content="Wayne">
+<meta property="og:description" content="字典树的实现和应用1.概述1.1 基础概念字典树,又称为单词查找树,Tire树,它是一种树形结构,它是一种hash树的变种.  1.2 基本性质 根节点不包含字符,除根节点外的每一个节点包含一个字符 从根节点到某一个节点,路上结果的字符链接起来,就是该节点对应的字符串. 每个节点对应的字符串都不相同  1.3 应用场景典型应用场景是用于统计,排序和保存大量的字符串(不仅限于字符串),经常被搜索引擎">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://cxzd.space/2020/02/25/字典树的实现和应用/D:/blog/xsyfl.github.io/source/_posts/字典树的实现和应用/字典树-1.png">
+<meta property="og:image" content="http://cxzd.space/2020/02/25/字典树的实现和应用/D:/blog/xsyfl.github.io/source/_posts/字典树的实现和应用/字典树-2.png">
+<meta property="og:updated_time" content="2020-03-29T08:19:59.737Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="字典树的实现和应用">
+<meta name="twitter:description" content="字典树的实现和应用1.概述1.1 基础概念字典树,又称为单词查找树,Tire树,它是一种树形结构,它是一种hash树的变种.  1.2 基本性质 根节点不包含字符,除根节点外的每一个节点包含一个字符 从根节点到某一个节点,路上结果的字符链接起来,就是该节点对应的字符串. 每个节点对应的字符串都不相同  1.3 应用场景典型应用场景是用于统计,排序和保存大量的字符串(不仅限于字符串),经常被搜索引擎">
+<meta name="twitter:image" content="http://cxzd.space/2020/02/25/字典树的实现和应用/D:/blog/xsyfl.github.io/source/_posts/字典树的实现和应用/字典树-1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://cxzd.space/2020/02/25/字典树的实现和应用/"/>
+
+
+
+
+
+  <title>字典树的实现和应用 | Wayne</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wayne</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">记录学习的技能和遇到的问题</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://cxzd.space/2020/02/25/字典树的实现和应用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wayne Cui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wayne">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">字典树的实现和应用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-25T22:20:00+08:00">
+                2020-02-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,295
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  6
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="字典树的实现和应用"><a href="#字典树的实现和应用" class="headerlink" title="字典树的实现和应用"></a>字典树的实现和应用</h1><h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1.概述"></a>1.概述</h2><h3 id="1-1-基础概念"><a href="#1-1-基础概念" class="headerlink" title="1.1 基础概念"></a>1.1 基础概念</h3><p>字典树,又称为单词查找树,Tire树,它是一种树形结构,它是一种hash树的变种.</p>
+<p><img src="/2020/02/25/字典树的实现和应用/D:/blog\xsyfl.github.io\source\_posts\字典树的实现和应用\字典树-1.png" alt="字典树-1"></p>
+<h3 id="1-2-基本性质"><a href="#1-2-基本性质" class="headerlink" title="1.2 基本性质"></a>1.2 基本性质</h3><ul>
+<li>根节点不包含字符,除根节点外的每一个节点包含一个字符</li>
+<li>从根节点到某一个节点,路上结果的字符链接起来,就是该节点对应的字符串.</li>
+<li>每个节点对应的字符串都不相同</li>
+</ul>
+<h3 id="1-3-应用场景"><a href="#1-3-应用场景" class="headerlink" title="1.3 应用场景"></a>1.3 应用场景</h3><p>典型应用场景是用于统计,排序和保存大量的字符串(不仅限于字符串),经常被搜索引擎用系统用于文本词频统计.</p>
+<h2 id="2-代码实现"><a href="#2-代码实现" class="headerlink" title="2. 代码实现"></a>2. 代码实现</h2><h3 id="2-1-定义字典树节点"><a href="#2-1-定义字典树节点" class="headerlink" title="2.1 定义字典树节点"></a>2.1 定义字典树节点</h3><p>字典树节点包含四个关键的属性,分别是</p>
+<ul>
+<li>由根节点至该节点组成的字符串出现的次数</li>
+<li>所有的子节点(子节点也是字典树节点)</li>
+<li>是否是叶子节点</li>
+<li>节点的值</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TrieNode</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num; <span class="comment">//单词出现次数</span></span><br><span class="line">    TrieNode[] sons; <span class="comment">//所有的子节点</span></span><br><span class="line">    <span class="keyword">boolean</span> isEnd; <span class="comment">//是否是叶子节点</span></span><br><span class="line">    <span class="keyword">char</span> val; <span class="comment">//节点值</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TrieNode</span><span class="params">(<span class="keyword">char</span> val)</span> </span>&#123;</span><br><span class="line">        num = <span class="number">1</span>;</span><br><span class="line">        sons = <span class="keyword">new</span> TrieNode[<span class="number">26</span>]; <span class="comment">// 26个小写字母</span></span><br><span class="line">        isEnd = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">this</span>.val = val;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TrieNode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        num = <span class="number">1</span>;</span><br><span class="line">        sons = <span class="keyword">new</span> TrieNode[<span class="number">26</span>]; <span class="comment">// 26个小写字母</span></span><br><span class="line">        isEnd = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">this</span>.val = val;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-构建一颗字典树"><a href="#2-2-构建一颗字典树" class="headerlink" title="2.2 构建一颗字典树"></a>2.2 构建一颗字典树</h3><p>字典树有关键属性</p>
+<ul>
+<li>节点数</li>
+<li>根节点</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TrieTree</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> TrieNode root; <span class="comment">// 根节点</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size; <span class="comment">// 总结点个数, 不包含跟节点</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//初始化字典树</span></span><br><span class="line">    TrieTree()&#123;</span><br><span class="line">        root = <span class="keyword">new</span> TrieNode();</span><br><span class="line">        size = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-3-插入节点"><a href="#2-3-插入节点" class="headerlink" title="2.3 插入节点"></a>2.3 插入节点</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">public void insert(String str)&#123;</span><br><span class="line">    if(str == null || str.length() == 0) return;</span><br><span class="line">    TrieNode node = root;</span><br><span class="line">    char[] chars = str.toCharArray();</span><br><span class="line">    for (int i = 0; i &lt; chars.length; i++) &#123;</span><br><span class="line">        int pos = chars[i] - &apos;a&apos;;</span><br><span class="line">        if(node.sons[pos] == null)&#123;</span><br><span class="line">            node.sons[pos] = new TrieNode(chars[i]);</span><br><span class="line">            size++;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            node.sons[pos].num++;</span><br><span class="line">        &#125;</span><br><span class="line">        node = node.sons[pos];</span><br><span class="line">    &#125;</span><br><span class="line">    node.isEnd = true;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-4-查询路径为当前字符串的节点"><a href="#2-4-查询路径为当前字符串的节点" class="headerlink" title="2.4 查询路径为当前字符串的节点"></a>2.4 查询路径为当前字符串的节点</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询包含该字符串的最后一个节点</span></span><br><span class="line"><span class="comment">     * 返回null则表示不包含</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> str</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> TrieNode <span class="title">getNode</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (str == <span class="keyword">null</span> || str.length() == <span class="number">0</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        TrieNode node = root;</span><br><span class="line">        <span class="keyword">char</span>[] chars = str.toCharArray();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; chars.length; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> pos = chars[i] - <span class="string">'a'</span>;</span><br><span class="line">            <span class="keyword">if</span> (node.sons[pos] == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            node = node.sons[pos];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-5-计算包含前缀的单词数量"><a href="#2-5-计算包含前缀的单词数量" class="headerlink" title="2.5 计算包含前缀的单词数量"></a>2.5 计算包含前缀的单词数量</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 计算前缀的单词数量</span><br><span class="line"> * @param prefix</span><br><span class="line"> * @return</span><br><span class="line"> */</span><br><span class="line">public int countPrefix(String prefix)&#123;</span><br><span class="line">    if(prefix == null || prefix.length() == 0) return -1;</span><br><span class="line">    TrieNode node = getNode(prefix);</span><br><span class="line">    return node !=null ? node.num : 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-6-查询是否包含该字符串"><a href="#2-6-查询是否包含该字符串" class="headerlink" title="2.6 查询是否包含该字符串"></a>2.6 查询是否包含该字符串</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 查询字是否包含该字符串</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> str</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">has</span><span class="params">(String str)</span></span>&#123;</span><br><span class="line">       TrieNode node = getNode(str);</span><br><span class="line">       <span class="keyword">return</span> node !=<span class="keyword">null</span>;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-7-查询是否完美包含该字符串"><a href="#2-7-查询是否完美包含该字符串" class="headerlink" title="2.7 查询是否完美包含该字符串"></a>2.7 查询是否完美包含该字符串</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 是否完美包含该字符串,接字符串长度</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> str</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">perfectHas</span><span class="params">(String str)</span></span>&#123;</span><br><span class="line">       TrieNode node = getNode(str);</span><br><span class="line">       <span class="keyword">return</span> node !=<span class="keyword">null</span> ? node.isEnd : <span class="keyword">false</span>;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-8-前序遍历"><a href="#2-8-前序遍历" class="headerlink" title="2.8 前序遍历"></a>2.8 前序遍历</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">preTraverse</span><span class="params">()</span></span>&#123;</span><br><span class="line">       TrieNode node = root;</span><br><span class="line">       <span class="keyword">if</span>(node == <span class="keyword">null</span>) <span class="keyword">return</span>;</span><br><span class="line">       <span class="keyword">for</span> (TrieNode child:node.sons</span><br><span class="line">            ) &#123;</span><br><span class="line">           preTraverse(child,<span class="string">""</span>);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">preTraverse</span><span class="params">(TrieNode node,String str)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span>(node == <span class="keyword">null</span>) <span class="keyword">return</span>;</span><br><span class="line">       String val = str + node.val;</span><br><span class="line">       <span class="keyword">if</span>(node.isEnd) System.out.println(val);</span><br><span class="line">       <span class="keyword">for</span> (TrieNode child:node.sons) &#123;</span><br><span class="line">           preTraverse(child,val);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-应用"><a href="#3-应用" class="headerlink" title="3. 应用"></a>3. 应用</h2><p>leetcode-820.单词的压缩编码</p>
+<p><a href="https://leetcode-cn.com/problems/short-encoding-of-words/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/short-encoding-of-words/</a></p>
+<h3 id="3-1-解题思路"><a href="#3-1-解题思路" class="headerlink" title="3.1 解题思路"></a>3.1 解题思路</h3><p>例如，如果这个列表是 [“time”, “me”, “bell”]，我们就可以将其表示为 S = “time#bell#” 和 indexes = [0, 2, 5]。</p>
+<p>我们可以先构建一个如下字典树.</p>
+<p><img src="/2020/02/25/字典树的实现和应用/D:/blog\xsyfl.github.io\source\_posts\字典树的实现和应用\字典树-2.png" alt="字典树-2"></p>
+<p>通过字典树,就可以求出本题的解.</p>
+<h3 id="3-2-解题代码"><a href="#3-2-解题代码" class="headerlink" title="3.2 解题代码"></a>3.2 解题代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minimumLengthEncoding</span><span class="params">(String[] words)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(words.length == <span class="number">1</span>) <span class="keyword">return</span> words[<span class="number">0</span>].length() + <span class="number">1</span>;</span><br><span class="line">        <span class="comment">// 按照字符串长度排序,保证先插入长的字符串,后插入短的字符串,这样,只要判断插入的字符串中有新</span></span><br><span class="line">      	<span class="comment">//的节点,则表示在总长度上加上字符串长度并+1(#的长度)</span></span><br><span class="line">        Arrays.sort(words,(String str1,String str2)-&gt; str2.length() - str1.length());</span><br><span class="line">        Trie trie = <span class="keyword">new</span> Trie();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; words.length; i++) &#123;</span><br><span class="line">			<span class="comment">//插入所有字符串</span></span><br><span class="line">            trie.insert(words[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> trie.length;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 构建字典树节点 去除了不需要的信息</span></span><br><span class="line"><span class="comment">//这里 节点的值,也不需要,如果单纯为了解题,可以把val也去掉.</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Node</span></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> val;</span><br><span class="line">    Node[] sons = <span class="keyword">new</span> Node[<span class="number">26</span>];</span><br><span class="line">    Node()&#123;&#125;</span><br><span class="line">    Node(<span class="keyword">char</span> val)&#123;</span><br><span class="line">        <span class="keyword">this</span>.val = val;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 构建字典树,新增了一个字段,length 表示压缩的字符串长度</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Trie</span></span>&#123;</span><br><span class="line">    Node root;</span><br><span class="line">   <span class="keyword">int</span> size = <span class="number">0</span>;</span><br><span class="line">   <span class="keyword">int</span> length = <span class="number">0</span>;</span><br><span class="line">    Trie()&#123;</span><br><span class="line">       root = <span class="keyword">new</span> Node();</span><br><span class="line">   &#125;</span><br><span class="line">  <span class="comment">//插入字符串,这里将字符串倒叙插入</span></span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(String str)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(str == <span class="keyword">null</span> || str.length() == <span class="number">0</span>) <span class="keyword">return</span>;</span><br><span class="line">        Node node = root;</span><br><span class="line">       <span class="keyword">char</span>[] chars = str.toCharArray();</span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> i = chars.length-<span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">           <span class="keyword">int</span> pos = chars[i] - <span class="string">'a'</span>;</span><br><span class="line">           <span class="keyword">if</span>(node.sons[pos] == <span class="keyword">null</span>)&#123;</span><br><span class="line">               node.sons[pos] = <span class="keyword">new</span> Node(chars[i]);</span><br><span class="line">               size++;</span><br><span class="line">               <span class="comment">// 如果最后一个字节 是新的节点,则我们就在压缩后字符串长度 加上当前字符串长度 和 #号长度1</span></span><br><span class="line">               <span class="keyword">if</span>(i == <span class="number">0</span>) length+=chars.length+<span class="number">1</span>;</span><br><span class="line">           &#125;</span><br><span class="line">           node = node.sons[pos];</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/算法/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
+          
+            <a href="/tags/数据结构/" rel="tag"><i class="fa fa-tag"></i> 数据结构</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/25/通过字节码分析fanally面试题/" rel="next" title="通过字节码分析fanally面试题">
+                <i class="fa fa-chevron-left"></i> 通过字节码分析fanally面试题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/01/编译期语法糖(一)/" rel="prev" title="编译期语法糖(一)">
+                编译期语法糖(一) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header2.jpg"
+                alt="Wayne Cui" />
+            
+              <p class="site-author-name" itemprop="name">Wayne Cui</p>
+              <p class="site-description motion-element" itemprop="description">Java</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#字典树的实现和应用"><span class="nav-number">1.</span> <span class="nav-text">字典树的实现和应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-概述"><span class="nav-number">1.1.</span> <span class="nav-text">1.概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-基础概念"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 基础概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-基本性质"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 基本性质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-应用场景"><span class="nav-number">1.1.3.</span> <span class="nav-text">1.3 应用场景</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-代码实现"><span class="nav-number">1.2.</span> <span class="nav-text">2. 代码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-定义字典树节点"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 定义字典树节点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-构建一颗字典树"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 构建一颗字典树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-插入节点"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 插入节点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-查询路径为当前字符串的节点"><span class="nav-number">1.2.4.</span> <span class="nav-text">2.4 查询路径为当前字符串的节点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-计算包含前缀的单词数量"><span class="nav-number">1.2.5.</span> <span class="nav-text">2.5 计算包含前缀的单词数量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-查询是否包含该字符串"><span class="nav-number">1.2.6.</span> <span class="nav-text">2.6 查询是否包含该字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-7-查询是否完美包含该字符串"><span class="nav-number">1.2.7.</span> <span class="nav-text">2.7 查询是否完美包含该字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-8-前序遍历"><span class="nav-number">1.2.8.</span> <span class="nav-text">2.8 前序遍历</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-应用"><span class="nav-number">1.3.</span> <span class="nav-text">3. 应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-解题思路"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 解题思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-解题代码"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 解题代码</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wayne Cui</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
