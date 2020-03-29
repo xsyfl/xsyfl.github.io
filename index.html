@@ -252,6 +252,209 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://cxzd.space/2020/03/29/通过字节码分析fanally面试题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wayne Cui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wayne">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/29/通过字节码分析fanally面试题/" itemprop="url">通过字节码分析fanally面试题</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-29T16:20:00+08:00">
+                2020-03-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,398
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  6
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="通过字节码分析finally面试题"><a href="#通过字节码分析finally面试题" class="headerlink" title="通过字节码分析finally面试题"></a>通过字节码分析finally面试题</h1><p>首先我们先来看两道面试题</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo2_2</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(test());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">10</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">20</span>;</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">30</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public class Demo2_3 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        System.out.println(test());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static int test()&#123;</span><br><span class="line">        int i ;</span><br><span class="line">        try &#123;</span><br><span class="line">            i = 10;</span><br><span class="line">            return i;</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">//            e.printStackTrace();</span><br><span class="line">            i = 20;</span><br><span class="line">            return i;</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line">            i =30;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>问两道题分别输出什么?为什么?</p>
+<hr>
+<p>我们分开来看,先看第一道题</p>
+<p>利用javap -v 指令生成字节码, 为了方便观看,我们只留test方法.</p>
+<p> 这里相比之前的字节码多了一个Exception table, 是用来实现异常处理.</p>
+<p>我们来逐行分析字节码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">test</span><span class="params">()</span></span>;</span><br><span class="line">    descriptor: ()I</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=<span class="number">1</span>, locals=<span class="number">3</span>, args_size=<span class="number">0</span>   <span class="comment">// 栈帧深度为1   局部变量表长度为3  因为是static 所以没有this引用,也没有行参,所以行参数量为0</span></span><br><span class="line">         <span class="number">0</span>: bipush        <span class="number">10</span>           <span class="comment">// 准备一个为10的常量,放入栈中       ------------------</span></span><br><span class="line">         <span class="number">2</span>: istore_0                   <span class="comment">// 将10放入局部变量表1的槽位中             try部分代码 |</span></span><br><span class="line">         <span class="number">3</span>: bipush        <span class="number">30</span>           <span class="comment">// 准备一个为30的常量,放入栈中               ---------</span></span><br><span class="line">         <span class="number">5</span>: ireturn                    <span class="comment">// ireturn 代表返回一个int类型的数据,也就是栈顶的30 </span></span><br><span class="line">         <span class="number">6</span>: astore_0                   <span class="comment">// 将Exception对象放入局部变量表    -------------------</span></span><br><span class="line">         <span class="number">7</span>: bipush        <span class="number">20</span>           <span class="comment">// 准备一个20的常量放入栈中              cache部分     |</span></span><br><span class="line">         <span class="number">9</span>: istore_1                   <span class="comment">// 将栈顶的20放入局部变量表                       代码 |</span></span><br><span class="line">        <span class="number">10</span>: bipush        <span class="number">30</span>           <span class="comment">// 准备一个30的常量放入栈中         -------------------  </span></span><br><span class="line">        <span class="number">12</span>: ireturn                    <span class="comment">// 返回栈顶的30                  -</span></span><br><span class="line">        <span class="number">13</span>: astore_2                   <span class="comment">// 将异常类型放入局部变量表        ---------------------</span></span><br><span class="line">        <span class="number">14</span>: bipush        <span class="number">30</span>           <span class="comment">// 准备一个30的常量放入栈中             finally部分     |</span></span><br><span class="line">        <span class="number">16</span>: ireturn                    <span class="comment">//  返回栈顶的30                  ---------------------</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">        * 异常表,用来实现异常功能. </span></span><br><span class="line"><span class="comment">        * from 代表 监听其实代码.(包含)</span></span><br><span class="line"><span class="comment">        * to   代表监听终止代码.(不包含)</span></span><br><span class="line"><span class="comment">        * target 代表如果出现异常,则跳转到字节码序号</span></span><br><span class="line"><span class="comment">        * type  代表监听类型</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">      Exception table:</span><br><span class="line">         from    to  target type</span><br><span class="line">             <span class="number">0</span>     <span class="number">3</span>     <span class="number">6</span>   Class java/lang/Exception  <span class="comment">//监听0-3,如果出现Exception类型的异常,则跳转到6</span></span><br><span class="line">             <span class="number">0</span>     <span class="number">3</span>    <span class="number">13</span>   any    <span class="comment">//监听0-3,如果出现非Exception类型的异常,如error,则跳转到13</span></span><br><span class="line">             <span class="number">6</span>    <span class="number">10</span>    <span class="number">13</span>   any    <span class="comment">//监听6-10,也就是cache代码块,如果出现任意异常,则跳转到13</span></span><br><span class="line">      LineNumberTable:</span><br><span class="line">       .....</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            <span class="number">7</span>       <span class="number">6</span>     <span class="number">0</span>     e   Ljava/lang/Exception;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里,我们可以看到:</p>
+<ol>
+<li>无论是try代码块,还是cache代码块,在编译期,都会在其后面追加上finally代码块的代码,以保障finall一定执行,因为一个方法只能有一个return,所以前面的return在编译期被优化了.</li>
+<li>为了保证finally代码块无论什么情况都要执行,所以利用了异常表,来保障,即使在try中发生了未cache的异常,或者在cache中发生异常,finally代码块都会执行.</li>
+<li>finally代码块,如果有retrun的话,发生异常可能被忽略,没有throw出去.这个例子中,如果cache中发生异常,或者try中发生为捕获的异常,但是却没有throw出去.所以,<strong>尽量不要在finally中写return.</strong></li>
+<li>在编译期,显示局部变量表长度为3,但是反编译结果却只有1个.这可能是由于后面两个变量无法确定名称导致.</li>
+</ol>
+<p>现在,我们知道了第一道题的答案:输出结果为30.</p>
+<hr>
+<p>然后我们再看第二道题</p>
+<p>还是先用javap -v 来反编译</p>
+<p>同样我们值保留test()方法</p>
+<p>然后来逐行分析</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">  public static int test();</span><br><span class="line">    descriptor: ()I</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=1, locals=4, args_size=0  // 栈深度为1 局部变量表长度为4  行参数为0</span><br><span class="line">         0: bipush        10          //准备一个常量10             ------------------------------</span><br><span class="line">         2: istore_0                  //放入局部变量表_0                   try代码              |</span><br><span class="line">         3: iload_0                   //从局部变量表_0去除10                                    |</span><br><span class="line">         4: istore_1                  //放入局部变量表_1   这是局部变量表_1和_2的数值都是10  -----</span><br><span class="line">         5: bipush        30          // 准备一个常量30</span><br><span class="line">         7: istore_0                  // 放入局部变量表_0 </span><br><span class="line">         8: iload_1                   // 将局部变量表_1放入栈顶</span><br><span class="line">         9: ireturn                   // 返回栈顶的元素</span><br><span class="line">        10: astore_1                  // 将Exception放入局部变量_1   --------------------------</span><br><span class="line">        11: bipush        20          // 准备20                          cache代码            |</span><br><span class="line">        13: istore_0                  // 将20放入局部变量表_0                                  |</span><br><span class="line">        14: iload_0                   // 加载局部变量表_0                                      |</span><br><span class="line">        15: istore_2                  // 放入局部变量表_2  这时局部变量表_0和_2的数值都是20   ----</span><br><span class="line">        16: bipush        30          // 准备30</span><br><span class="line">        18: istore_0                  // 放入局部变量表_0  此时局部变量表0为30 2为20</span><br><span class="line">        19: iload_2                   // 载入局部变量表_2  也就是数值20</span><br><span class="line">        20: ireturn                   // 返回栈顶数据</span><br><span class="line">        21: astore_3                  // 将异常放入局部变量表_3</span><br><span class="line">        22: bipush        30          // 准备30</span><br><span class="line">        24: istore_0                  // 放入局部变量表_0</span><br><span class="line">        25: aload_3                   // 去除局部变量表_3的异常</span><br><span class="line">        26: athrow                    // throw异常</span><br><span class="line">      Exception table:</span><br><span class="line">        ........</span><br><span class="line">      LineNumberTable:</span><br><span class="line">		...</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            3       7     0     i   I</span><br><span class="line">           11      10     1     e   Ljava/lang/Exception;</span><br><span class="line">           14       7     0     i   I</span><br><span class="line">           25       2     0     i   I</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里,我们可以看出:</p>
+<ol>
+<li>在finally中修改return的属性时,我们会先复制一份放入局部变量表,然后修改原有数据,将复制的数据return</li>
+<li>如果finally中没有retrurn,则出现异常时,finally中会主动throw掉.</li>
+</ol>
+<hr>
+<p>以上仅为个人观点,如有错误,欢迎指正.谢谢!</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://cxzd.space/2020/03/08/编译期语法糖(三)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1337,209 +1540,6 @@
 <p><img src="/2020/02/25/字典树的实现和应用/D:/blog\xsyfl.github.io\source\_posts\字典树的实现和应用\字典树-2.png" alt="字典树-2"></p>
 <p>通过字典树,就可以求出本题的解.</p>
 <h3 id="3-2-解题代码"><a href="#3-2-解题代码" class="headerlink" title="3.2 解题代码"></a>3.2 解题代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minimumLengthEncoding</span><span class="params">(String[] words)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(words.length == <span class="number">1</span>) <span class="keyword">return</span> words[<span class="number">0</span>].length() + <span class="number">1</span>;</span><br><span class="line">        <span class="comment">// 按照字符串长度排序,保证先插入长的字符串,后插入短的字符串,这样,只要判断插入的字符串中有新</span></span><br><span class="line">      	<span class="comment">//的节点,则表示在总长度上加上字符串长度并+1(#的长度)</span></span><br><span class="line">        Arrays.sort(words,(String str1,String str2)-&gt; str2.length() - str1.length());</span><br><span class="line">        Trie trie = <span class="keyword">new</span> Trie();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; words.length; i++) &#123;</span><br><span class="line">			<span class="comment">//插入所有字符串</span></span><br><span class="line">            trie.insert(words[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> trie.length;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 构建字典树节点 去除了不需要的信息</span></span><br><span class="line"><span class="comment">//这里 节点的值,也不需要,如果单纯为了解题,可以把val也去掉.</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Node</span></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> val;</span><br><span class="line">    Node[] sons = <span class="keyword">new</span> Node[<span class="number">26</span>];</span><br><span class="line">    Node()&#123;&#125;</span><br><span class="line">    Node(<span class="keyword">char</span> val)&#123;</span><br><span class="line">        <span class="keyword">this</span>.val = val;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 构建字典树,新增了一个字段,length 表示压缩的字符串长度</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Trie</span></span>&#123;</span><br><span class="line">    Node root;</span><br><span class="line">   <span class="keyword">int</span> size = <span class="number">0</span>;</span><br><span class="line">   <span class="keyword">int</span> length = <span class="number">0</span>;</span><br><span class="line">    Trie()&#123;</span><br><span class="line">       root = <span class="keyword">new</span> Node();</span><br><span class="line">   &#125;</span><br><span class="line">  <span class="comment">//插入字符串,这里将字符串倒叙插入</span></span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(String str)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(str == <span class="keyword">null</span> || str.length() == <span class="number">0</span>) <span class="keyword">return</span>;</span><br><span class="line">        Node node = root;</span><br><span class="line">       <span class="keyword">char</span>[] chars = str.toCharArray();</span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> i = chars.length-<span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">           <span class="keyword">int</span> pos = chars[i] - <span class="string">'a'</span>;</span><br><span class="line">           <span class="keyword">if</span>(node.sons[pos] == <span class="keyword">null</span>)&#123;</span><br><span class="line">               node.sons[pos] = <span class="keyword">new</span> Node(chars[i]);</span><br><span class="line">               size++;</span><br><span class="line">               <span class="comment">// 如果最后一个字节 是新的节点,则我们就在压缩后字符串长度 加上当前字符串长度 和 #号长度1</span></span><br><span class="line">               <span class="keyword">if</span>(i == <span class="number">0</span>) length+=chars.length+<span class="number">1</span>;</span><br><span class="line">           &#125;</span><br><span class="line">           node = node.sons[pos];</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://cxzd.space/2020/02/25/通过字节码分析fanally面试题/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Wayne Cui">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/header2.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Wayne">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/25/通过字节码分析fanally面试题/" itemprop="url">通过字节码分析fanally面试题</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-25T22:20:00+08:00">
-                2020-02-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,398
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  6
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="通过字节码分析finally面试题"><a href="#通过字节码分析finally面试题" class="headerlink" title="通过字节码分析finally面试题"></a>通过字节码分析finally面试题</h1><p>首先我们先来看两道面试题</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo2_2</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(test());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">10</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">20</span>;</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">30</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public class Demo2_3 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        System.out.println(test());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static int test()&#123;</span><br><span class="line">        int i ;</span><br><span class="line">        try &#123;</span><br><span class="line">            i = 10;</span><br><span class="line">            return i;</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">//            e.printStackTrace();</span><br><span class="line">            i = 20;</span><br><span class="line">            return i;</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line">            i =30;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>问两道题分别输出什么?为什么?</p>
-<hr>
-<p>我们分开来看,先看第一道题</p>
-<p>利用javap -v 指令生成字节码, 为了方便观看,我们只留test方法.</p>
-<p> 这里相比之前的字节码多了一个Exception table, 是用来实现异常处理.</p>
-<p>我们来逐行分析字节码</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">test</span><span class="params">()</span></span>;</span><br><span class="line">    descriptor: ()I</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=<span class="number">1</span>, locals=<span class="number">3</span>, args_size=<span class="number">0</span>   <span class="comment">// 栈帧深度为1   局部变量表长度为3  因为是static 所以没有this引用,也没有行参,所以行参数量为0</span></span><br><span class="line">         <span class="number">0</span>: bipush        <span class="number">10</span>           <span class="comment">// 准备一个为10的常量,放入栈中       ------------------</span></span><br><span class="line">         <span class="number">2</span>: istore_0                   <span class="comment">// 将10放入局部变量表1的槽位中             try部分代码 |</span></span><br><span class="line">         <span class="number">3</span>: bipush        <span class="number">30</span>           <span class="comment">// 准备一个为30的常量,放入栈中               ---------</span></span><br><span class="line">         <span class="number">5</span>: ireturn                    <span class="comment">// ireturn 代表返回一个int类型的数据,也就是栈顶的30 </span></span><br><span class="line">         <span class="number">6</span>: astore_0                   <span class="comment">// 将Exception对象放入局部变量表    -------------------</span></span><br><span class="line">         <span class="number">7</span>: bipush        <span class="number">20</span>           <span class="comment">// 准备一个20的常量放入栈中              cache部分     |</span></span><br><span class="line">         <span class="number">9</span>: istore_1                   <span class="comment">// 将栈顶的20放入局部变量表                       代码 |</span></span><br><span class="line">        <span class="number">10</span>: bipush        <span class="number">30</span>           <span class="comment">// 准备一个30的常量放入栈中         -------------------  </span></span><br><span class="line">        <span class="number">12</span>: ireturn                    <span class="comment">// 返回栈顶的30                  -</span></span><br><span class="line">        <span class="number">13</span>: astore_2                   <span class="comment">// 将异常类型放入局部变量表        ---------------------</span></span><br><span class="line">        <span class="number">14</span>: bipush        <span class="number">30</span>           <span class="comment">// 准备一个30的常量放入栈中             finally部分     |</span></span><br><span class="line">        <span class="number">16</span>: ireturn                    <span class="comment">//  返回栈顶的30                  ---------------------</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">        * 异常表,用来实现异常功能. </span></span><br><span class="line"><span class="comment">        * from 代表 监听其实代码.(包含)</span></span><br><span class="line"><span class="comment">        * to   代表监听终止代码.(不包含)</span></span><br><span class="line"><span class="comment">        * target 代表如果出现异常,则跳转到字节码序号</span></span><br><span class="line"><span class="comment">        * type  代表监听类型</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">      Exception table:</span><br><span class="line">         from    to  target type</span><br><span class="line">             <span class="number">0</span>     <span class="number">3</span>     <span class="number">6</span>   Class java/lang/Exception  <span class="comment">//监听0-3,如果出现Exception类型的异常,则跳转到6</span></span><br><span class="line">             <span class="number">0</span>     <span class="number">3</span>    <span class="number">13</span>   any    <span class="comment">//监听0-3,如果出现非Exception类型的异常,如error,则跳转到13</span></span><br><span class="line">             <span class="number">6</span>    <span class="number">10</span>    <span class="number">13</span>   any    <span class="comment">//监听6-10,也就是cache代码块,如果出现任意异常,则跳转到13</span></span><br><span class="line">      LineNumberTable:</span><br><span class="line">       .....</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            <span class="number">7</span>       <span class="number">6</span>     <span class="number">0</span>     e   Ljava/lang/Exception;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这里,我们可以看到:</p>
-<ol>
-<li>无论是try代码块,还是cache代码块,在编译期,都会在其后面追加上finally代码块的代码,以保障finall一定执行,因为一个方法只能有一个return,所以前面的return在编译期被优化了.</li>
-<li>为了保证finally代码块无论什么情况都要执行,所以利用了异常表,来保障,即使在try中发生了未cache的异常,或者在cache中发生异常,finally代码块都会执行.</li>
-<li>finally代码块,如果有retrun的话,发生异常可能被忽略,没有throw出去.这个例子中,如果cache中发生异常,或者try中发生为捕获的异常,但是却没有throw出去.所以,<strong>尽量不要在finally中写return.</strong></li>
-<li>在编译期,显示局部变量表长度为3,但是反编译结果却只有1个.这可能是由于后面两个变量无法确定名称导致.</li>
-</ol>
-<p>现在,我们知道了第一道题的答案:输出结果为30.</p>
-<hr>
-<p>然后我们再看第二道题</p>
-<p>还是先用javap -v 来反编译</p>
-<p>同样我们值保留test()方法</p>
-<p>然后来逐行分析</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">  public static int test();</span><br><span class="line">    descriptor: ()I</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=1, locals=4, args_size=0  // 栈深度为1 局部变量表长度为4  行参数为0</span><br><span class="line">         0: bipush        10          //准备一个常量10             ------------------------------</span><br><span class="line">         2: istore_0                  //放入局部变量表_0                   try代码              |</span><br><span class="line">         3: iload_0                   //从局部变量表_0去除10                                    |</span><br><span class="line">         4: istore_1                  //放入局部变量表_1   这是局部变量表_1和_2的数值都是10  -----</span><br><span class="line">         5: bipush        30          // 准备一个常量30</span><br><span class="line">         7: istore_0                  // 放入局部变量表_0 </span><br><span class="line">         8: iload_1                   // 将局部变量表_1放入栈顶</span><br><span class="line">         9: ireturn                   // 返回栈顶的元素</span><br><span class="line">        10: astore_1                  // 将Exception放入局部变量_1   --------------------------</span><br><span class="line">        11: bipush        20          // 准备20                          cache代码            |</span><br><span class="line">        13: istore_0                  // 将20放入局部变量表_0                                  |</span><br><span class="line">        14: iload_0                   // 加载局部变量表_0                                      |</span><br><span class="line">        15: istore_2                  // 放入局部变量表_2  这时局部变量表_0和_2的数值都是20   ----</span><br><span class="line">        16: bipush        30          // 准备30</span><br><span class="line">        18: istore_0                  // 放入局部变量表_0  此时局部变量表0为30 2为20</span><br><span class="line">        19: iload_2                   // 载入局部变量表_2  也就是数值20</span><br><span class="line">        20: ireturn                   // 返回栈顶数据</span><br><span class="line">        21: astore_3                  // 将异常放入局部变量表_3</span><br><span class="line">        22: bipush        30          // 准备30</span><br><span class="line">        24: istore_0                  // 放入局部变量表_0</span><br><span class="line">        25: aload_3                   // 去除局部变量表_3的异常</span><br><span class="line">        26: athrow                    // throw异常</span><br><span class="line">      Exception table:</span><br><span class="line">        ........</span><br><span class="line">      LineNumberTable:</span><br><span class="line">		...</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            3       7     0     i   I</span><br><span class="line">           11      10     1     e   Ljava/lang/Exception;</span><br><span class="line">           14       7     0     i   I</span><br><span class="line">           25       2     0     i   I</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这里,我们可以看出:</p>
-<ol>
-<li>在finally中修改return的属性时,我们会先复制一份放入局部变量表,然后修改原有数据,将复制的数据return</li>
-<li>如果finally中没有retrurn,则出现异常时,finally中会主动throw掉.</li>
-</ol>
-<hr>
-<p>以上仅为个人观点,如有错误,欢迎指正.谢谢!</p>
 
           
         
