@@ -392,7 +392,7 @@
 <p>另一个cur,表示当前待反转的节点.</p>
 <p>每次迭代到 cur，都将 cur 的 next 指向 pre，然后 pre 和 cur 前进一位。<br>当迭代结束时(cur==null),pre就是最后一个节点了.</p>
 <p>如下动图:</p>
-<p><img src="/2020/04/19/单链表反转/单链表反转.gif" alt="单链表反转"></p>
+<p><img src="/2020/04/19/单链表反转/listrevert.gif" alt="单链表反转"></p>
 <p>根据上述思路,实现代码如下:</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> ListNode <span class="title">reverseList</span><span class="params">(ListNode head)</span> </span>&#123;</span><br><span class="line">       ListNode prev = <span class="keyword">null</span>;</span><br><span class="line">       ListNode curr = head;</span><br><span class="line">       <span class="keyword">while</span> (curr != <span class="keyword">null</span>) &#123;</span><br><span class="line">           ListNode nextTemp = curr.next;</span><br><span class="line">           curr.next = prev;</span><br><span class="line">           prev = curr;</span><br><span class="line">           curr = nextTemp;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> prev;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 <h3 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h3><p>递归的思路和上面动图差不多,只不过是实现方式有点差别.</p>

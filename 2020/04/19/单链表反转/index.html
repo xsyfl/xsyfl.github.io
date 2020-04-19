@@ -87,12 +87,12 @@
 <meta property="og:site_name" content="Wayne">
 <meta property="og:description" content="单链表反转题目说明LeetCode第206题. 反转一个单链表。 示例: 输入: 1-&amp;gt;2-&amp;gt;3-&amp;gt;4-&amp;gt;5-&amp;gt;NULL输出: 5-&amp;gt;4-&amp;gt;3-&amp;gt;2-&amp;gt;1-&amp;gt;NULL进阶:你可以迭代或递归地反转链表。你能否用两种方法解决这道题？ 来源：力扣（LeetCode）链接：https://leetcode-cn.com/problems/reve">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://cxzd.space/2020/04/19/单链表反转/单链表反转.gif">
-<meta property="og:updated_time" content="2020-04-19T14:11:31.984Z">
+<meta property="og:image" content="http://cxzd.space/2020/04/19/单链表反转/listrevert.gif">
+<meta property="og:updated_time" content="2020-04-19T14:15:12.363Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="单链表反转">
 <meta name="twitter:description" content="单链表反转题目说明LeetCode第206题. 反转一个单链表。 示例: 输入: 1-&amp;gt;2-&amp;gt;3-&amp;gt;4-&amp;gt;5-&amp;gt;NULL输出: 5-&amp;gt;4-&amp;gt;3-&amp;gt;2-&amp;gt;1-&amp;gt;NULL进阶:你可以迭代或递归地反转链表。你能否用两种方法解决这道题？ 来源：力扣（LeetCode）链接：https://leetcode-cn.com/problems/reve">
-<meta name="twitter:image" content="http://cxzd.space/2020/04/19/单链表反转/单链表反转.gif">
+<meta name="twitter:image" content="http://cxzd.space/2020/04/19/单链表反转/listrevert.gif">
 
 
 
@@ -391,7 +391,7 @@
 <p>另一个cur,表示当前待反转的节点.</p>
 <p>每次迭代到 cur，都将 cur 的 next 指向 pre，然后 pre 和 cur 前进一位。<br>当迭代结束时(cur==null),pre就是最后一个节点了.</p>
 <p>如下动图:</p>
-<p><img src="/2020/04/19/单链表反转/单链表反转.gif" alt="单链表反转"></p>
+<p><img src="/2020/04/19/单链表反转/listrevert.gif" alt="单链表反转"></p>
 <p>根据上述思路,实现代码如下:</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> ListNode <span class="title">reverseList</span><span class="params">(ListNode head)</span> </span>&#123;</span><br><span class="line">       ListNode prev = <span class="keyword">null</span>;</span><br><span class="line">       ListNode curr = head;</span><br><span class="line">       <span class="keyword">while</span> (curr != <span class="keyword">null</span>) &#123;</span><br><span class="line">           ListNode nextTemp = curr.next;</span><br><span class="line">           curr.next = prev;</span><br><span class="line">           prev = curr;</span><br><span class="line">           curr = nextTemp;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> prev;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 <h3 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h3><p>递归的思路和上面动图差不多,只不过是实现方式有点差别.</p>
