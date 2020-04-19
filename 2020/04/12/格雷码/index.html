@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="算法,数据结构," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="格雷码格雷码简介​    在一组数的编码中，若任意两个相邻的编码只有一位二进制数不同，则称这种编码为格雷码（Gray Code），另外由于最大数和最小数之间也仅有一位数不同，即”首尾相连”，因此又成循环码、反射码。 格雷码编码形式   十进制数 4位自然二进制码 4位典型格雷码 十进制余三格雷码 十进制空六格雷码 十进制跳六格雷码 步进码      0000 0000 0010 0000 0000">
+<meta name="keywords" content="算法,数据结构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="格雷码">
+<meta property="og:url" content="http://cxzd.space/2020/04/12/格雷码/index.html">
+<meta property="og:site_name" content="Wayne">
+<meta property="og:description" content="格雷码格雷码简介​    在一组数的编码中，若任意两个相邻的编码只有一位二进制数不同，则称这种编码为格雷码（Gray Code），另外由于最大数和最小数之间也仅有一位数不同，即”首尾相连”，因此又成循环码、反射码。 格雷码编码形式   十进制数 4位自然二进制码 4位典型格雷码 十进制余三格雷码 十进制空六格雷码 十进制跳六格雷码 步进码      0000 0000 0010 0000 0000">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-04-12T09:01:34.250Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="格雷码">
+<meta name="twitter:description" content="格雷码格雷码简介​    在一组数的编码中，若任意两个相邻的编码只有一位二进制数不同，则称这种编码为格雷码（Gray Code），另外由于最大数和最小数之间也仅有一位数不同，即”首尾相连”，因此又成循环码、反射码。 格雷码编码形式   十进制数 4位自然二进制码 4位典型格雷码 十进制余三格雷码 十进制空六格雷码 十进制跳六格雷码 步进码      0000 0000 0010 0000 0000">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://cxzd.space/2020/04/12/格雷码/"/>
+
+
+
+
+
+  <title>格雷码 | Wayne</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wayne</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">记录学习的技能和遇到的问题</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://cxzd.space/2020/04/12/格雷码/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wayne Cui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wayne">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">格雷码</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-12T17:01:00+08:00">
+                2020-04-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,090
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  12
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="格雷码"><a href="#格雷码" class="headerlink" title="格雷码"></a>格雷码</h1><h2 id="格雷码简介"><a href="#格雷码简介" class="headerlink" title="格雷码简介"></a>格雷码简介</h2><p>​    在一组数的编码中，若任意两个相邻的编码只有一位二进制数不同，则称这种编码为格雷码（Gray Code），另外由于最大数和最小数之间也仅有一位数不同，即”首尾相连”，因此又成循环码、反射码。</p>
+<h2 id="格雷码编码形式"><a href="#格雷码编码形式" class="headerlink" title="格雷码编码形式"></a>格雷码编码形式</h2><table>
+<thead>
+<tr>
+<th>十进制数</th>
+<th>4位自然二进制码</th>
+<th>4位典型格雷码</th>
+<th>十进制余三格雷码</th>
+<th>十进制空六格雷码</th>
+<th>十进制跳六格雷码</th>
+<th>步进码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>0000</td>
+<td>0000</td>
+<td>0010</td>
+<td>0000</td>
+<td>0000</td>
+<td>00000</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0001</td>
+<td>0001</td>
+<td>0110</td>
+<td>0001</td>
+<td>0001</td>
+<td>00001</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0010</td>
+<td>0011</td>
+<td>0111</td>
+<td>0011</td>
+<td>0011</td>
+<td>00011</td>
+</tr>
+</tbody>
+</table>
+<p>……</p>
+<p>表中典型格雷码具有代表性。若不做特别说明，格雷码就是指典型格雷码，它可从自然二进制码转换而来。（其他格雷码怎么转换我也不知道…）</p>
+<h3 id="为什么要使用格雷码"><a href="#为什么要使用格雷码" class="headerlink" title="为什么要使用格雷码"></a>为什么要使用格雷码</h3><p>雷码是一种具有反射特性和循环特性的单步自补码，其循环和单步特性消除了随机取数时出现重大错误的可能，其反射和自补特性使得对其进行求反操作也非常方便，所以，格雷码属于一种可靠性编码，是一种错误最小化的编码方式，因此格雷码在通信和测量技术中得到广泛应用。</p>
+<p>格雷码属于可靠性编码，是一种错误最小化的编码方式。因为，虽然自然二进制码可以直接由数/模转换器转换成模拟信号，但在某些情况，例如从十进制的3转换为4时二进制码的每一位都要变，能使数字电路产生很大的尖峰电流脉冲。而格雷码则没有这一缺点，它在相邻位间转换时，只有一位产生变化。它大大地减少了由一个状态到下一个状态时逻辑的混淆。由于这种编码相邻的两个码组之间只有一位不同，因而在用于方向的转角位移量－数字量的转换中，当方向的转角位移量发生微小变化（而可能引起数字量发生变化时，格雷码仅改变一位，这样与其它编码同时改变两位或多位的情况相比更为可靠，即可减少出错的可能性。</p>
+<p>在数字系统中，常要求代码按一定顺序变化。例如，按自然数递增计数，若采用8421码，则数0111变到1000时四位均要变化，而在实际电路中，4位的变化不可能绝对同时发生，则计数中可能出现短暂的其它代码（1100、1111等）。在特定情况下可能导致电路状态错误或输入错误。使用格雷码可以避免这种错误。</p>
+<p>格雷码是一种绝对编码方式，典型格雷码是一种具有反射特性和循环特性的单步自补码，它的循环、单步特性消除了随机取数时出现重大误差的可能，它的反射、自补特性使得求反非常方便。</p>
+<p>由于格雷码是一种变权码，每一位码没有固定的大小，很难直接进行比较大小和算术运算，也不能直接转换成液位信号，要经过一次码变换，变成自然二进制码，再由上位机读取。</p>
+<p>典型格雷码是一种采用绝对编码方式的准权码，其权的绝对值为2^i-1(设最低位i=1)。</p>
+<p>格雷码的十进制数奇偶性与其码字中1的个数的奇偶性相同。</p>
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><p>格雷氏编码与相位移在三维曲面量测：利用格雷码投射在微型曲面做量测 一个非接触式、投影的方法光学测量。</p>
+<p>在化简逻辑函数时，可以通过按格雷码排列的卡诺图来完成。</p>
+<p>角度传感器：汽车制动系统有时需要传感器产生的数字值来指示机械位置。如图是编码盘和一些触点的概念图，根据盘转的位置，触点产生一个3位二进制编码，共有8个这样的编码。盘中暗的区域与对应的逻辑1的信号源相连；亮的区域没有连接，触点将其解释为逻辑0。使用格雷码对编码盘上的亮暗区域编码，使得其连续的码字之间只有一个数位变化。这样就不会因为器件制造的精确度有限，而使得触点转到边界位置而出现错误编码。</p>
+<p>九连环问题：中国的古老益智玩具九连环有着和格雷码完全相同的数学模式，外国一款名为spin out的玩具也是运用相同的数学模式。智力玩具九连环的状态 变化符合格雷码的编码规律，汉诺塔的解法也与格雷码有关。九连环中的每个环都有上下两种状态，如果把这两种状态用0/1来表示的话，这个状态序列就会形成一种循环二进制编码（格雷码）的序列。所以解决九连环问题所需要的状态变化数就是格雷码111111111所对应的十进制数341。</p>
+<h2 id="二进制格雷码的生成"><a href="#二进制格雷码的生成" class="headerlink" title="二进制格雷码的生成"></a>二进制格雷码的生成</h2><p>问题：产生n位元的所有格雷码字符串表示</p>
+<p>​    格雷码（Gray Code）是一个数列集合，每个数使用二进制位来表示，假设使用n位元来表示每个数字，任意连个数之间只有一个位元值不同。</p>
+<p>​    例如一下为3位元的格雷码：000，001，011，010，110，111，101，100。</p>
+<p>​    如何要产生n位元的格雷码，那么格雷码的个数为2^n。</p>
+<h3 id="直接排列"><a href="#直接排列" class="headerlink" title="直接排列"></a>直接排列</h3><p>生成二进制格雷码方式1：以二进制位0的格雷码为第0项，第一项改变最右面的位元，第二项改变右起第一个位1的委员的左边位元，第三、第四项方法同第一、第二项，循环反复，即可排列出n个位元的格雷码。</p>
+<p>用一个例子来证明：</p>
+<p>​    假设产生3位元的格雷码，原始值位 000</p>
+<ol>
+<li><p>改变最右面的位元值：001</p>
+</li>
+<li><p>改变右起第一个为1的位元的左面的位元：011</p>
+</li>
+<li><p>改变最右面的位元值：010</p>
+</li>
+<li><p>改变右起第一个位1的位元的左面的位元：110</p>
+</li>
+<li><p>改变最右面的位元值：111</p>
+</li>
+<li><p>改变右起第一个位1的位元的左面的位元：101</p>
+</li>
+<li><p>改变最右面的位元值：100</p>
+<h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 直接获取格雷码</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> n</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;StringBuffer&gt; <span class="title">directGetCode</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">        List&lt;StringBuffer&gt; result = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="comment">// 获取第一位 000</span></span><br><span class="line">        StringBuffer startSB = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">        <span class="comment">//记录上一个数的二进制格雷码</span></span><br><span class="line">        StringBuffer lastSB = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">            startSB.append(<span class="number">0</span>);</span><br><span class="line">            lastSB = startSB;</span><br><span class="line">        &#125;</span><br><span class="line">        result.add(startSB);</span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">1</span>&lt;&lt;n;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; count; i++) &#123;</span><br><span class="line">            StringBuffer sb = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">            <span class="keyword">if</span>(i%<span class="number">2</span> == <span class="number">1</span>)&#123;</span><br><span class="line">                String preStr = lastSB.substring(<span class="number">0</span>, lastSB.length() - <span class="number">1</span>);</span><br><span class="line">                sb.append(preStr);</span><br><span class="line">                String endStr = lastSB.substring(lastSB.length() - <span class="number">1</span>);</span><br><span class="line">                <span class="keyword">if</span>(endStr.equals(<span class="string">"0"</span>))&#123;</span><br><span class="line">                    sb.append(<span class="number">1</span>);</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    sb.append(<span class="number">0</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                result.add(sb);</span><br><span class="line">                lastSB = sb;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j = lastSB.length()-<span class="number">1</span>; j &gt;=<span class="number">0</span> ; j--) &#123;</span><br><span class="line">                    <span class="keyword">char</span> c = lastSB.charAt(j);</span><br><span class="line">                    <span class="keyword">if</span>(<span class="string">"1"</span>.equals(String.valueOf(c)))&#123;</span><br><span class="line">                        String preStr = lastSB.substring(<span class="number">0</span>, j-<span class="number">1</span>);</span><br><span class="line">                        sb.append(preStr);</span><br><span class="line">                        String midStr = lastSB.substring(j-<span class="number">1</span>,j);</span><br><span class="line">                        <span class="keyword">if</span>(midStr.equals(<span class="string">"0"</span>))&#123;</span><br><span class="line">                            sb.append(<span class="number">1</span>);</span><br><span class="line">                        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                            sb.append(<span class="number">0</span>);</span><br><span class="line">                        &#125;</span><br><span class="line">                        String endStr = lastSB.substring(j);</span><br><span class="line">                        sb.append(endStr);</span><br><span class="line">                        result.add(sb);</span><br><span class="line">                        lastSB = sb;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="镜像排列"><a href="#镜像排列" class="headerlink" title="镜像排列"></a>镜像排列</h3><p> 生成二进制格雷码方式2：n位元的格雷码可以从n-1位的格雷码以上下镜像后加上新位元的方式快速得到。</p>
+<p>如果按照直接排列规则来生成格雷码，是没有问题的，但是这样做太复杂了。如果仔细观察格雷码的结构，我们会有以下发现：</p>
+<p>　　1、除了最高位（左边第一位），格雷码的位元完全上下对称（看下面列表）。比如第一个格雷码与最后一个格雷码对称（除了第一位），第二个格雷码与倒数第二个对称，以此类推。</p>
+<p>　　2、最小的重复单元是 0 , 1。</p>
+<p>000</p>
+<p>001</p>
+<p>011</p>
+<p>010</p>
+<p>110</p>
+<p>111</p>
+<p>101</p>
+<p>100</p>
+<p>所以，在实现的时候，我们完全可以利用递归，在每一层前面加上0或者1，然后就可以列出所有的格雷码。</p>
+<p>比如：</p>
+<p>第一步：产生 0, 1 两个字符串。</p>
+<p>　　第二步：在第一步的基础上，正向每一个字符串都分别加上0，然后反向迭代每一个字符串都加上1，但是每次只能加一个，所以得做两次。这样就变成了 00,01,11,10 （注意对称）。</p>
+<p>　　第三步：在第二步的基础上，再给每个字符串都加上0和1，同样，每次只能加一个，这样就变成了 000,001,011,010,110,111,101,100。这样就把3位元格雷码生成好了。</p>
+<p>　　如果要生成4位元格雷码，我们只需要在3位元格雷码上再加一层0,1就可以了： 0000,0001,0011,0010,0110,0111,0101,0100,1100,1101,1110,1010,0111,1001,1000.</p>
+<p> 　也就是说，n位元格雷码是基于n-1位元格雷码产生的。</p>
+<h4 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * n位元的格雷码可以从n-1位元的格雷码以上下镜射后加上新位元的方式快速的得到</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> n</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> List&lt;StringBuffer&gt; <span class="title">getCode</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">       List&lt;StringBuffer&gt; result = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">       getCode(n,result);</span><br><span class="line">       <span class="keyword">return</span> result;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">getCode</span><span class="params">(<span class="keyword">int</span> n, List&lt;StringBuffer&gt; result)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span>(n == <span class="number">1</span>)&#123;</span><br><span class="line">           StringBuffer sb= <span class="keyword">new</span> StringBuffer();</span><br><span class="line">           sb.append(<span class="number">0</span>);</span><br><span class="line">           result.add(sb);</span><br><span class="line">           StringBuffer sb2= <span class="keyword">new</span> StringBuffer();</span><br><span class="line">           sb2.append(<span class="number">1</span>);</span><br><span class="line">           result.add(sb2);</span><br><span class="line">       &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">           getCode(n-<span class="number">1</span>,result);</span><br><span class="line">           List&lt;StringBuffer&gt; addList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">           <span class="keyword">for</span> (<span class="keyword">int</span> i = result.size()-<span class="number">1</span>; i &gt;=<span class="number">0</span> ; i--) &#123;</span><br><span class="line">               StringBuffer newSb = <span class="keyword">new</span> StringBuffer(result.get(i));</span><br><span class="line">               result.get(i).insert(<span class="number">0</span>,<span class="string">"0"</span>);</span><br><span class="line">               newSb.insert(<span class="number">0</span>,<span class="string">"1"</span>);</span><br><span class="line">               addList.add(newSb);</span><br><span class="line">           &#125;</span><br><span class="line">           result.addAll(addList);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h5 id="利用二进制转换"><a href="#利用二进制转换" class="headerlink" title="利用二进制转换"></a>利用二进制转换</h5><p>​    二进制码转换成二进制格雷码，实际上是保留二进制最高位作为格雷码的最高位，而次高位格雷码为二进制码的的高位与次高位相异或，格雷码其余各位与次高位求发类似。</p>
+<p>Note: 这样做可行的原因，是因为二进制码每次+1时最多只有<strong>一个</strong>相邻的两个bit对的异或值会发生改变。</p>
+<p>公式表示：G：格雷码 B：二进制码<br>整个数G(N) = (B(n) &gt;&gt; 1) ^ B(n)</p>
+<p>公式原因：1. 任何数右移一位后，第一位都为0</p>
+<ol start="2">
+<li><p>1或0  与 0 异或后都是原来的数。</p>
+<h4 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">     * 通过二进制转换成格雷码</span><br><span class="line">     * @param n</span><br><span class="line">     */</span><br><span class="line">    public void getGredCode(int n)&#123;</span><br><span class="line">        List&lt;StringBuffer&gt; result = new ArrayList&lt;&gt;();</span><br><span class="line">        int count = 1 &lt;&lt; n;</span><br><span class="line">        for (int i = 0; i &lt; count; i++) &#123;</span><br><span class="line">            int grayCode = (i &gt;&gt; 1) ^ i;</span><br><span class="line">            System.out.println(num2Binary(grayCode, n));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    public String num2Binary(int num, int bitNum)&#123;</span><br><span class="line">        String ret = &quot;&quot;;</span><br><span class="line">        for(int i = bitNum-1; i &gt;= 0; i--)&#123;</span><br><span class="line">            ret += (num &gt;&gt; i) &amp; 1;</span><br><span class="line">        &#125;</span><br><span class="line">        return ret;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="格雷码转二进制码"><a href="#格雷码转二进制码" class="headerlink" title="格雷码转二进制码"></a>格雷码转二进制码</h2><p>二进制格雷码转换成二进制码，其法则是保留格雷码的最高位作为自然二进制码的最高位，而次高位自然二进制码为高位自然二进制码与次高位格雷码相异或，而自然二进制码的其余各位与次高位自然二进制码的求法相类似。 </p>
+<h4 id="代码实现-3"><a href="#代码实现-3" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getBinaryCode</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> m = n;</span><br><span class="line">        <span class="keyword">int</span> binaryCode = m ^ (n&gt;&gt;<span class="number">1</span>);</span><br><span class="line">        System.out.println(num2Binary(binaryCode,<span class="number">3</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">num2Binary</span><span class="params">(<span class="keyword">int</span> num, <span class="keyword">int</span> bitNum)</span></span>&#123;</span><br><span class="line">        String ret = <span class="string">""</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = bitNum-<span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)&#123;</span><br><span class="line">            ret += (num &gt;&gt; i) &amp; <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="相关Leetcode题目"><a href="#相关Leetcode题目" class="headerlink" title="相关Leetcode题目"></a>相关Leetcode题目</h2><p><a href="https://leetcode-cn.com/problems/circular-permutation-in-binary-representation/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/circular-permutation-in-binary-representation/</a>  循环码排列</p>
+<h4 id="代码实现-4"><a href="#代码实现-4" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">circularPermutation</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">int</span> start)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; result = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        List&lt;Integer&gt; first = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">int</span> length = <span class="number">1</span> &lt;&lt; n;</span><br><span class="line">        <span class="keyword">boolean</span> key = <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; length; i++) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(key)&#123;</span><br><span class="line">                <span class="keyword">int</span> binaryCode = getBinaryCode(i);</span><br><span class="line">                <span class="keyword">if</span>(binaryCode == start)&#123;</span><br><span class="line">                    key = <span class="keyword">false</span>;</span><br><span class="line">                    result.add(binaryCode);</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    first.add(binaryCode);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">int</span> binaryCode = getBinaryCode(i);</span><br><span class="line">                result.add(binaryCode);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        result.addAll(first);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getBinaryCode</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> m = n;</span><br><span class="line">        <span class="keyword">int</span> binaryCode = m ^ (n&gt;&gt;<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> binaryCode;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/算法/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
+          
+            <a href="/tags/数据结构/" rel="tag"><i class="fa fa-tag"></i> 数据结构</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/04/JDK的动态代理为什么需要接口/" rel="next" title="JDK的动态代理为什么需要接口">
+                <i class="fa fa-chevron-left"></i> JDK的动态代理为什么需要接口
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/04/19/单链表反转/" rel="prev" title="单链表反转">
+                单链表反转 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/header2.jpg"
+                alt="Wayne Cui" />
+            
+              <p class="site-author-name" itemprop="name">Wayne Cui</p>
+              <p class="site-description motion-element" itemprop="description">Java</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#格雷码"><span class="nav-number">1.</span> <span class="nav-text">格雷码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#格雷码简介"><span class="nav-number">1.1.</span> <span class="nav-text">格雷码简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#格雷码编码形式"><span class="nav-number">1.2.</span> <span class="nav-text">格雷码编码形式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么要使用格雷码"><span class="nav-number">1.2.1.</span> <span class="nav-text">为什么要使用格雷码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用"><span class="nav-number">1.2.2.</span> <span class="nav-text">应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二进制格雷码的生成"><span class="nav-number">1.3.</span> <span class="nav-text">二进制格雷码的生成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#直接排列"><span class="nav-number">1.3.1.</span> <span class="nav-text">直接排列</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码实现"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">代码实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#镜像排列"><span class="nav-number">1.3.2.</span> <span class="nav-text">镜像排列</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码实现-1"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">代码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#利用二进制转换"><span class="nav-number">1.3.2.1.1.</span> <span class="nav-text">利用二进制转换</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代码实现-2"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">代码实现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#格雷码转二进制码"><span class="nav-number">1.4.</span> <span class="nav-text">格雷码转二进制码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码实现-3"><span class="nav-number">1.4.0.1.</span> <span class="nav-text">代码实现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关Leetcode题目"><span class="nav-number">1.5.</span> <span class="nav-text">相关Leetcode题目</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码实现-4"><span class="nav-number">1.5.0.1.</span> <span class="nav-text">代码实现</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wayne Cui</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>

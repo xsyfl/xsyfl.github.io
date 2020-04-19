@@ -252,6 +252,441 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://cxzd.space/2020/02/16/通过一道面试题来学习StringTable/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wayne Cui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wayne">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/16/通过一道面试题来学习StringTable/" itemprop="url">通过一道面试题来学习StringTable</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-16T21:30:00+08:00">
+                2020-02-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,095
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  16
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="通过一道面试题来学习StringTable"><a href="#通过一道面试题来学习StringTable" class="headerlink" title="通过一道面试题来学习StringTable"></a>通过一道面试题来学习StringTable</h1><p>先看下下面这道面试题</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">String s1 = <span class="string">"a"</span>;</span><br><span class="line">    String s2 = <span class="string">"b"</span>;</span><br><span class="line">    String s3 = <span class="string">"a"</span> + <span class="string">"b"</span>;</span><br><span class="line">    String s4 = s1 + s2;</span><br><span class="line">    String s5 = <span class="string">"ab"</span>;</span><br><span class="line">    String s6 = s4.intern();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//问</span></span><br><span class="line">    System.out.println(s3 == s4);</span><br><span class="line">    System.out.println(s3 == s5);</span><br><span class="line">    System.out.println(s3 == s6);</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    String x2 = <span class="keyword">new</span> String(<span class="string">"c"</span>) + <span class="keyword">new</span> String(<span class="string">"d"</span>);</span><br><span class="line">    String x1 = <span class="string">"cd"</span>;</span><br><span class="line">    x2.intern();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//问 如果调换了[最后两行代码的位置]? 如果是java6呢</span></span><br><span class="line">    System.out.println(x1 == x2);</span><br></pre></td></tr></table></figure>
+<h2 id="常量池和串池之间的关系"><a href="#常量池和串池之间的关系" class="headerlink" title="常量池和串池之间的关系"></a>常量池和串池之间的关系</h2><p>首先我们先通过一个Demo案例来分析.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class Demo02 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        String s1 = &quot;a&quot;;</span><br><span class="line">        String s2 = &quot;b&quot;;</span><br><span class="line">        String s3 = &quot;ab&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后利用javap命令反编译class </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">javap -v Demo02.class</span><br></pre></td></tr></table></figure>
+<p>反编译后样式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">Classfile /E:/workplace/abc/jvmStudy/out/production/jvmStudy/demo1/Demo02.class</span><br><span class="line">  Last modified 2020-2-16; size 482 bytes</span><br><span class="line">  MD5 checksum fafaf5d5900d39006ae780bf977babac</span><br><span class="line">  Compiled from &quot;Demo02.java&quot;</span><br><span class="line">public class demo1.Demo02</span><br><span class="line">  minor version: 0</span><br><span class="line">  major version: 52</span><br><span class="line">  flags: ACC_PUBLIC, ACC_SUPER</span><br><span class="line">Constant pool:</span><br><span class="line">   #1 = Methodref          #6.#24         // java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">   #2 = String             #25            // a</span><br><span class="line">   #3 = String             #26            // b</span><br><span class="line">   #4 = String             #27            // ab</span><br><span class="line">   #5 = Class              #28            // demo1/Demo02</span><br><span class="line">   #6 = Class              #29            // java/lang/Object</span><br><span class="line">   #7 = Utf8               &lt;init&gt;</span><br><span class="line">   #8 = Utf8               ()V</span><br><span class="line">   #9 = Utf8               Code</span><br><span class="line">  #10 = Utf8               LineNumberTable</span><br><span class="line">  #11 = Utf8               LocalVariableTable</span><br><span class="line">  #12 = Utf8               this</span><br><span class="line">  #13 = Utf8               Ldemo1/Demo02;</span><br><span class="line">  #14 = Utf8               main</span><br><span class="line">  #15 = Utf8               ([Ljava/lang/String;)V</span><br><span class="line">  #16 = Utf8               args</span><br><span class="line">  #17 = Utf8               [Ljava/lang/String;</span><br><span class="line">  #18 = Utf8               s1</span><br><span class="line">  #19 = Utf8               Ljava/lang/String;</span><br><span class="line">  #20 = Utf8               s2</span><br><span class="line">  #21 = Utf8               s3</span><br><span class="line">  #22 = Utf8               SourceFile</span><br><span class="line">  #23 = Utf8               Demo02.java</span><br><span class="line">  #24 = NameAndType        #7:#8          // &quot;&lt;init&gt;&quot;:()V</span><br><span class="line">  #25 = Utf8               a</span><br><span class="line">  #26 = Utf8               b</span><br><span class="line">  #27 = Utf8               ab</span><br><span class="line">  #28 = Utf8               demo1/Demo02</span><br><span class="line">  #29 = Utf8               java/lang/Object</span><br><span class="line">&#123;</span><br><span class="line">  public demo1.Demo02();</span><br><span class="line">    descriptor: ()V</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=1, locals=1, args_size=1</span><br><span class="line">         0: aload_0</span><br><span class="line">         1: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">         4: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 3: 0</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0       5     0  this   Ldemo1/Demo02;</span><br><span class="line"></span><br><span class="line">  public static void main(java.lang.String[]);</span><br><span class="line">    descriptor: ([Ljava/lang/String;)V</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=1, locals=4, args_size=1</span><br><span class="line">         0: ldc           #2                  // String a</span><br><span class="line">         2: astore_1</span><br><span class="line">         3: ldc           #3                  // String b</span><br><span class="line">         5: astore_2</span><br><span class="line">         6: ldc           #4                  // String ab</span><br><span class="line">         8: astore_3</span><br><span class="line">         9: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 5: 0</span><br><span class="line">        line 6: 3</span><br><span class="line">        line 7: 6</span><br><span class="line">        line 8: 9</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0      10     0  args   [Ljava/lang/String;</span><br><span class="line">            3       7     1    s1   Ljava/lang/String;</span><br><span class="line">            6       4     2    s2   Ljava/lang/String;</span><br><span class="line">            9       1     3    s3   Ljava/lang/String;</span><br><span class="line">&#125;</span><br><span class="line">SourceFile: &quot;Demo02.java&quot;</span><br></pre></td></tr></table></figure>
+<p>然后找到main方法部分,我们来查看字节码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">public static void main(java.lang.String[]);</span><br><span class="line">    descriptor: ([Ljava/lang/String;)V</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=1, locals=4, args_size=1</span><br><span class="line">         0: ldc           #2                  // String a</span><br><span class="line">         2: astore_1</span><br><span class="line">         3: ldc           #3                  // String b</span><br><span class="line">         5: astore_2</span><br><span class="line">         6: ldc           #4                  // String ab</span><br><span class="line">         8: astore_3</span><br><span class="line">         9: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 5: 0</span><br><span class="line">        line 6: 3</span><br><span class="line">        line 7: 6</span><br><span class="line">        line 8: 9</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0      10     0  args   [Ljava/lang/String;</span><br><span class="line">            3       7     1    s1   Ljava/lang/String;</span><br><span class="line">            6       4     2    s2   Ljava/lang/String;</span><br><span class="line">            9       1     3    s3   Ljava/lang/String;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中 ldc #2 表示去常量池中的2号位置加载数据(“a”).</p>
+<p>astore_a 表示把加载好的数据存入一个1号局部变量.</p>
+<p>LocalVariableTable 表示方法的局部变量表,对应的1号局部变量就是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3       7     1    s1   Ljava/lang/String;</span><br></pre></td></tr></table></figure>
+<p>同理可理解全部main方法.</p>
+<p> Constant pool  指的是运行时常量池.</p>
+<h2 id="通过反编译来查看字符串拼接"><a href="#通过反编译来查看字符串拼接" class="headerlink" title="通过反编译来查看字符串拼接"></a>通过反编译来查看字符串拼接</h2><p>现在我们来新增一行代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String s4 = s1 + s2;</span><br></pre></td></tr></table></figure>
+<p>再重新编译Demo02,然后使用javap进行反编译,得到如下内容:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line">Classfile /E:/workplace/abc/jvmStudy/out/production/jvmStudy/demo1/Demo02.class</span><br><span class="line">  Last modified 2020-2-16; size 666 bytes</span><br><span class="line">  MD5 checksum 8071b7cfbe139cfe3a2c99c48aa13260</span><br><span class="line">  Compiled from &quot;Demo02.java&quot;</span><br><span class="line">public class demo1.Demo02</span><br><span class="line">  minor version: 0</span><br><span class="line">  major version: 52</span><br><span class="line">  flags: ACC_PUBLIC, ACC_SUPER</span><br><span class="line">Constant pool:</span><br><span class="line">   #1 = Methodref          #10.#29        // java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">   #2 = String             #30            // a</span><br><span class="line">   #3 = String             #31            // b</span><br><span class="line">   #4 = String             #32            // ab</span><br><span class="line">   #5 = Class              #33            // java/lang/StringBuilder</span><br><span class="line">   #6 = Methodref          #5.#29         // java/lang/StringBuilder.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">   #7 = Methodref          #5.#34         // java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line">   #8 = Methodref          #5.#35         // java/lang/StringBuilder.toString:()Ljava/lang/String;</span><br><span class="line">   #9 = Class              #36            // demo1/Demo02</span><br><span class="line">  #10 = Class              #37            // java/lang/Object</span><br><span class="line">  #11 = Utf8               &lt;init&gt;</span><br><span class="line">  #12 = Utf8               ()V</span><br><span class="line">  #13 = Utf8               Code</span><br><span class="line">  #14 = Utf8               LineNumberTable</span><br><span class="line">  #15 = Utf8               LocalVariableTable</span><br><span class="line">  #16 = Utf8               this</span><br><span class="line">  #17 = Utf8               Ldemo1/Demo02;</span><br><span class="line">  #18 = Utf8               main</span><br><span class="line">  #19 = Utf8               ([Ljava/lang/String;)V</span><br><span class="line">  #20 = Utf8               args</span><br><span class="line">  #21 = Utf8               [Ljava/lang/String;</span><br><span class="line">  #22 = Utf8               s1</span><br><span class="line">  #23 = Utf8               Ljava/lang/String;</span><br><span class="line">  #24 = Utf8               s2</span><br><span class="line">  #25 = Utf8               s3</span><br><span class="line">  #26 = Utf8               s4</span><br><span class="line">  #27 = Utf8               SourceFile</span><br><span class="line">  #28 = Utf8               Demo02.java</span><br><span class="line">  #29 = NameAndType        #11:#12        // &quot;&lt;init&gt;&quot;:()V</span><br><span class="line">  #30 = Utf8               a</span><br><span class="line">  #31 = Utf8               b</span><br><span class="line">  #32 = Utf8               ab</span><br><span class="line">  #33 = Utf8               java/lang/StringBuilder</span><br><span class="line">  #34 = NameAndType        #38:#39        // append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line">  #35 = NameAndType        #40:#41        // toString:()Ljava/lang/String;</span><br><span class="line">  #36 = Utf8               demo1/Demo02</span><br><span class="line">  #37 = Utf8               java/lang/Object</span><br><span class="line">  #38 = Utf8               append</span><br><span class="line">  #39 = Utf8               (Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line">  #40 = Utf8               toString</span><br><span class="line">  #41 = Utf8               ()Ljava/lang/String;</span><br><span class="line">&#123;</span><br><span class="line">  public demo1.Demo02();</span><br><span class="line">    descriptor: ()V</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=1, locals=1, args_size=1</span><br><span class="line">         0: aload_0</span><br><span class="line">         1: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">         4: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 3: 0</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0       5     0  this   Ldemo1/Demo02;</span><br><span class="line"></span><br><span class="line">  public static void main(java.lang.String[]);</span><br><span class="line">    descriptor: ([Ljava/lang/String;)V</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=2, locals=5, args_size=1</span><br><span class="line">         0: ldc           #2                  // String a</span><br><span class="line">         2: astore_1</span><br><span class="line">         3: ldc           #3                  // String b</span><br><span class="line">         5: astore_2</span><br><span class="line">         6: ldc           #4                  // String ab</span><br><span class="line">         8: astore_3</span><br><span class="line">         9: new           #5                  // class java/lang/StringBuilder</span><br><span class="line">        12: dup</span><br><span class="line">        13: invokespecial #6                  // Method java/lang/StringBuilder.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">        16: aload_1</span><br><span class="line">        17: invokevirtual #7                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line">        20: aload_2</span><br><span class="line">        21: invokevirtual #7                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line">        24: invokevirtual #8                  // Method java/lang/StringBuilder.toString:()Ljava/lang/String;</span><br><span class="line">        27: astore        4</span><br><span class="line">        29: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 5: 0</span><br><span class="line">        line 6: 3</span><br><span class="line">        line 7: 6</span><br><span class="line">        line 8: 9</span><br><span class="line">        line 9: 29</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0      30     0  args   [Ljava/lang/String;</span><br><span class="line">            3      27     1    s1   Ljava/lang/String;</span><br><span class="line">            6      24     2    s2   Ljava/lang/String;</span><br><span class="line">            9      21     3    s3   Ljava/lang/String;</span><br><span class="line">           29       1     4    s4   Ljava/lang/String;</span><br><span class="line">&#125;</span><br><span class="line">SourceFile: &quot;Demo02.java&quot;</span><br></pre></td></tr></table></figure>
+<p>我们来查看新增的第四行代码反编译的结果</p>
+<ol>
+<li>9: new           #5                  // class java/lang/StringBuilder<br>先通过new关键字创建了一个StringBuilder对象</li>
+<li>13: invokespecial #6                  // Method java/lang/StringBuilder.”<init>“:()V<br>调用StringBuilder的构造方法,通过()V可以看出是一个无参构造</init></li>
+<li>16: aload_1<br>将局部变量表中的1号局部变量加入栈顶供方法使用</li>
+<li>17: invokevirtual #7                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;<br>调用StringBuilder的append方法.</li>
+<li>20: aload_2<br>加载S2入栈</li>
+<li>21: invokevirtual #7                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;<br>调用append方法</li>
+<li>invokevirtual #8                  // Method java/lang/StringBuilder.toString:()Ljava/lang/String;<br>调用StringBuilder中的toString方法</li>
+<li>27: astore        4<br>添加到4号局部变量</li>
+</ol>
+<hr>
+<p>然后我们看一下StringBuilder中的toString()方法.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        // Create a copy, don&apos;t share the array</span><br><span class="line">        return new String(value, 0, count);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>他就是通过StringBuilder中的value值,创建了一个新的值为”ab”字符串对象.</p>
+<p>所以 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(s3 == s4);</span><br></pre></td></tr></table></figure>
+<p>的结果就很明显了,s3是串池中的对象,而s4是一个新new的对象.</p>
+<h2 id="编译器优化"><a href="#编译器优化" class="headerlink" title="编译器优化"></a>编译器优化</h2><p>我们在定义一个变量s5</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String s5 = &quot;a&quot; + &quot;b&quot;;</span><br></pre></td></tr></table></figure>
+<p>然后再进行反编译</p>
+<p>反编译后我们继续查看main方法的字节码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"> public static void main(java.lang.String[]);</span><br><span class="line">    descriptor: ([Ljava/lang/String;)V</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=2, locals=6, args_size=1</span><br><span class="line">         0: ldc           #2                  // String a</span><br><span class="line">         2: astore_1</span><br><span class="line">         3: ldc           #3                  // String b</span><br><span class="line">         5: astore_2</span><br><span class="line">         6: ldc           #4                  // String ab</span><br><span class="line">         8: astore_3</span><br><span class="line">         9: new           #5                  // class java/lang/StringBuilder</span><br><span class="line">        12: dup</span><br><span class="line">        13: invokespecial #6                  // Method java/lang/StringBuilder.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">        16: aload_1</span><br><span class="line">        17: invokevirtual #7                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line">        20: aload_2</span><br><span class="line">        21: invokevirtual #7                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span><br><span class="line">        24: invokevirtual #8                  // Method java/lang/StringBuilder.toString:()Ljava/lang/String;</span><br><span class="line">        27: astore        4</span><br><span class="line">        29: ldc           #4                  // String ab</span><br><span class="line">        31: astore        5</span><br><span class="line">        33: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 5: 0</span><br><span class="line">        line 6: 3</span><br><span class="line">        line 7: 6</span><br><span class="line">        line 8: 9</span><br><span class="line">        line 9: 29</span><br><span class="line">        line 12: 33</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0      34     0  args   [Ljava/lang/String;</span><br><span class="line">            3      31     1    s1   Ljava/lang/String;</span><br><span class="line">            6      28     2    s2   Ljava/lang/String;</span><br><span class="line">            9      25     3    s3   Ljava/lang/String;</span><br><span class="line">           29       5     4    s4   Ljava/lang/String;</span><br><span class="line">           33       1     5    s5   Ljava/lang/String;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们找到s5的执行代码</p>
+<p>29: ldc           #4                  // String ab</p>
+<p>31: astore        5</p>
+<p>可以看出是直接在常量池中找到”ab”对象,然后存到局部变量表中</p>
+<p>我们可以对比下 String s3 = “ab”; 反编译的字节码</p>
+<p>  6: ldc           #4                  // String ab</p>
+<p>他们都是从常量池中找到”ab”对象</p>
+<hr>
+<p>所以</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(s3 == s5);//返回true</span><br></pre></td></tr></table></figure>
+<p>返回true.</p>
+<p>这是因为javac在编译期间做的优化,因为”a” ,”b” 都是常量,在编译期间做拼接,结果是固定的,不可能是其他结果,所以直接优化成”ab”.</p>
+<p>而s1 +s2 因为都是变量,无法在编译期间确定值,变量的值是可能改变的,所以在编译期间无法确定其值,所以需要通过StringBuilder来拼接字符串.</p>
+<h2 id="字符串加载到串池中的时间"><a href="#字符串加载到串池中的时间" class="headerlink" title="字符串加载到串池中的时间"></a>字符串加载到串池中的时间</h2><p>我们新建一个Demo03类,代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public class Demo03 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        System.out.println(&quot;1&quot;);</span><br><span class="line">        System.out.println(&quot;2&quot;);</span><br><span class="line">        System.out.println(&quot;3&quot;);</span><br><span class="line">        System.out.println(&quot;4&quot;);</span><br><span class="line">        System.out.println(&quot;5&quot;);</span><br><span class="line">        System.out.println(&quot;6&quot;);</span><br><span class="line">        System.out.println(&quot;7&quot;);</span><br><span class="line">        System.out.println(&quot;8&quot;);</span><br><span class="line">        System.out.println(&quot;9&quot;);</span><br><span class="line">        System.out.println(&quot;1&quot;);</span><br><span class="line">        System.out.println(&quot;2&quot;);</span><br><span class="line">        System.out.println(&quot;3&quot;);</span><br><span class="line">        System.out.println(&quot;4&quot;);</span><br><span class="line">        System.out.println(&quot;5&quot;);</span><br><span class="line">        System.out.println(&quot;6&quot;);</span><br><span class="line">        System.out.println(&quot;7&quot;);</span><br><span class="line">        System.out.println(&quot;8&quot;);</span><br><span class="line">        System.out.println(&quot;9&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后分别在两个 <strong>System.out.println(“1”);</strong>  处打断点.</p>
+<p>然后通过IDea中的Debug   memory工具来查看对象个数.</p>
+<p><img src="/2020/02/16/通过一道面试题来学习StringTable/D:/blog\xsyfl.github.io\source\_posts\通过一道面试题来学习StringTable\debug-memory-01.png" alt="debug-memory-01"></p>
+<p>点击load classes 查看运行到当前代码处,每个对象的实例个数.</p>
+<p><img src="/2020/02/16/通过一道面试题来学习StringTable/D:/blog\xsyfl.github.io\source\_posts\通过一道面试题来学习StringTable\debug-memory-02.png" alt="debug-memory-02"></p>
+<p>其中 String对象为2252.</p>
+<p>然后我们单步执行一下,2254(在System.out.print创建类名字符串),再执行一下,变成了2255.</p>
+<p>走到下一个断点处,String对象变为2262个,继续往下走,字符串个数不变.</p>
+<p>这个现象,充分证明了两个信息</p>
+<ol>
+<li>串池不是在编译期立即生成对象,而是在使用的时候才延迟加载</li>
+<li>如果串池中有对应的字符串对象,则从串池中获取,不再新创建对象.(“a”格式,如果使用new String(“a”) 则正常新建对象)</li>
+</ol>
+<h2 id="StringTable特性总结"><a href="#StringTable特性总结" class="headerlink" title="StringTable特性总结"></a>StringTable特性总结</h2><ol>
+<li>常量池中的字符串仅仅是符号,只有在第一次用到时才会变为对象</li>
+<li>利用串池的机制,来避免重复创建字符串对象</li>
+<li>字符串变量拼接的原理是StringBuilder.append</li>
+<li>字符串常量拼接的原理是编译期优化</li>
+<li>可以使用intern方法,主动将串池中还没有的字符串放入串池.</li>
+</ol>
+<h2 id="java8中的intern-方法"><a href="#java8中的intern-方法" class="headerlink" title="java8中的intern()方法"></a>java8中的intern()方法</h2><p>我们新创建一个测试类Demo04,代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class Demo04 &#123;</span><br><span class="line">    </span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        String s = new String(&quot;a&quot;) +  new String(&quot;b&quot;);</span><br><span class="line">        </span><br><span class="line">        String s2 = s.intern();</span><br><span class="line"></span><br><span class="line">        System.out.println(s == &quot;ab&quot;);</span><br><span class="line">        System.out.println(s2 == &quot;ab&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们逐步分析</p>
+<ol>
+<li>在执行 String s = new String(“a”) +  new String(“b”);时<br>串池中存在 “a” 对象和 “b” 对象<br>堆中存在   new String(“a”) 和  new String(“b”),以及拼接得来的 new String(“ab”)</li>
+<li>String s2 = s.intern();<br>intern()方法的作用是:// 将这个字符串对象放入串池,如果有则不会放入,会把串池中的对象返回<br>这时,串池中多了一个”ab”对象,且改对象与拼接来的 new String(“ab”)为同一个对象</li>
+</ol>
+<p>所以 两个判断相等的结果都为true</p>
+<p>假设 我们在执行 <strong>s.intern();</strong> 方法前面加上如下代码<strong>String x = “ab”;</strong> ,我们再来逐步分析</p>
+<p>在执行 <strong>s.intern()</strong> 时,串池中已经有了”ab”对象,则s2直接饮用串池中的”ab”对象,所以两个判断的结果应为<strong>false,true</strong> .</p>
+<h2 id="java1-6中的intern-方法"><a href="#java1-6中的intern-方法" class="headerlink" title="java1.6中的intern()方法"></a>java1.6中的intern()方法</h2><p> 在java1.6中,intern()方法将这个字符串尝试放入串池,如果有则不会放入,如果没有,则会将现有对象复制一份放入串池,也就是串池中的对象,并不是当前执行intern()的对象.</p>
+<p>这个就不具体演示了(偷懒…)</p>
+<h2 id="面试题结果"><a href="#面试题结果" class="headerlink" title="面试题结果"></a>面试题结果</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">public class Demo01 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        String s1 = &quot;a&quot;;</span><br><span class="line">        String s2 = &quot;b&quot;;</span><br><span class="line">        String s3 = &quot;a&quot; + &quot;b&quot;; //编译期优化,&quot;ab&quot;在在串池中</span><br><span class="line">        String s4 = s1 + s2; // StringBuilde拼接,堆中&quot;ab&quot;对象</span><br><span class="line">        String s5 = &quot;ab&quot;;</span><br><span class="line">        String s6 = s4.intern(); //返回串池中&quot;ab&quot;对象</span><br><span class="line"></span><br><span class="line">        //问</span><br><span class="line">        System.out.println(s3 == s4); //false</span><br><span class="line">        System.out.println(s3 == s5); //true</span><br><span class="line">        System.out.println(s3 == s6); //true</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        String x2 = new String(&quot;c&quot;) + new String(&quot;d&quot;); //堆中&quot;cd&quot;对象</span><br><span class="line">        String x1 = &quot;cd&quot;; //串池中&quot;cd&quot;对象</span><br><span class="line">        x2.intern();</span><br><span class="line"></span><br><span class="line">        //问 如果调换了[最后两行代码的位置]? 如果是java6呢</span><br><span class="line">        System.out.println(x1 == x2); //false</span><br><span class="line">        // 如果调换最后两行代码  true</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://cxzd.space/2019/04/07/二分查找/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wayne Cui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/header2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wayne">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/04/07/二分查找/" itemprop="url">二分查找</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-07T21:40:00+08:00">
+                2019-04-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  639
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="二分查找"><a href="#二分查找" class="headerlink" title="二分查找"></a>二分查找</h1><p>​    假设要在电话簿中找一个名字以K打头的人，可以从头开始翻页，知道进入以K打头的部分。但是你可能不这样做，而是从中间开始，因为你知道以K打头的名字在电话簿中间。</p>
+<p>​    又假设要在字典中找一个以O打头的单词，你也将从中间附近开始。</p>
+<p>​    现在假设你登陆微信。当你这样做是，微信必须核实你是否有其网站的账户，因此必须在其数据库中查找你的用户名名。如果你的用户名为wayne，微信可以从A打头的部分开始查找，但更合乎逻辑的做法是从中间开始查找。</p>
+<p>​    这是一个查找问题，在上述所有情况下，都可以使用同一种算法来解决问题，这种算法就是<strong>二分查找</strong>。</p>
+<h2 id="二分查找-1"><a href="#二分查找-1" class="headerlink" title="二分查找"></a>二分查找</h2><p>​    二分查找是一种算法，其输入是一个有序元素列表。如果要查找元素是否包含在列表中，二分查找返回其位置；否则返回null。</p>
+<p>​    下面的实例说明了二分查找的工作原理。我随便想一个1~100的数字。</p>
+<p><img src="/2019/04/07/二分查找/num1To100.jpg" alt="num1To100"></p>
+<p>​    假设我现在想的数字是68</p>
+<p>​    那么：</p>
+<p>​        第一次猜 50，小了；</p>
+<p>​        第二次猜75， 大了；</p>
+<p>​        第三次猜63， 小了；</p>
+<p>​        第四次猜71， 大了；</p>
+<p>​        第五次猜67， 小了；</p>
+<p>​        第六次猜69， 大了；</p>
+<p>​        第七次猜68， 正确。</p>
+<p>​    每次查找，如果错误，你将排除一般的错误答案！</p>
+<p>​    但是如果从1开始猜，那么我们将猜68次才能猜到。</p>
+<p>使用不同查找方法的最多步数</p>
+<table>
+<thead>
+<tr>
+<th>元素个数\查找方法</th>
+<th>二分查找</th>
+<th>简单查找</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100</td>
+<td>7</td>
+<td>100</td>
+</tr>
+<tr>
+<td>1024</td>
+<td>10</td>
+<td>1024</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 二分查找法</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> array   传入存放全部数据的容器</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> target  需要查找的目标数</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Integer <span class="title">searchDichotomy</span><span class="params">(Integer[] array, <span class="keyword">int</span> target)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> low =<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> hight=array.length-<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(low&lt;=hight)&#123;                 <span class="comment">//遍历还没结束</span></span><br><span class="line">        <span class="keyword">int</span> mid = (low+hight)/<span class="number">2</span>;       <span class="comment">//取中间值mid点位置</span></span><br><span class="line">        <span class="keyword">if</span>(array[mid]==target)&#123;        <span class="comment">//寻找到目标数</span></span><br><span class="line">            <span class="keyword">return</span> mid;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(array[mid] &gt; target)&#123;        <span class="comment">//如果中间值大于目标数，则将highr点位置移动mid位置左边</span></span><br><span class="line">           hight = mid-<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(array[mid] &lt; target)&#123;       <span class="comment">//如果中间值小于目标数，则将low点位置移动mid位置右边</span></span><br><span class="line">            low = mid+<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="运行时间"><a href="#运行时间" class="headerlink" title="运行时间"></a>运行时间</h2><p>　　对数时间（或log时间）</p>
+<p>　　　 100个数字最多猜7次  40亿猜32次</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://cxzd.space/2019/02/24/Ubuntu安装Docker/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -921,7 +1356,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -943,7 +1378,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
